@@ -56,7 +56,7 @@ int prev_rightHallVal = 0;
 int leftTime, cur_leftTime, rightTime, cur_rigthTime; //time variables
 //***********Radio******************
 
-
+//
 
 void setup()
 {
