@@ -1,0 +1,11 @@
+{
+  "additionalFiles": "/build/sketch/main.ino.cpp,/communication.cpp,/communication.h,/motor.cpp,/motor.h,/platform.cpp,/platform.h,/radio.cpp,/radio.h,/servoControl.cpp,/servoControl.h",
+  "builtInLibrariesFolders": "/Applications/Arduino.app/Contents/Java/libraries",
+  "customBuildProperties": "build.path=/Users/martinhinnerson/Documents/VSCode/Walle/main/build,build.warn_data_percentage=75,runtime.tools.arduinoOTA.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr,runtime.tools.avr-gcc.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr,runtime.tools.avrdude.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr",
+  "fqbn": "arduino:avr:uno",
+  "hardwareFolders": "/Applications/Arduino.app/Contents/Java/hardware,/Users/martinhinnerson/Library/Arduino15/packages",
+  "otherLibrariesFolders": "/Users/martinhinnerson/Documents/Arduino/libraries",
+  "runtime.ide.version": "10806",
+  "sketchLocation": "/Users/martinhinnerson/Documents/VSCode/Walle/main/main.ino",
+  "toolsFolders": "/Applications/Arduino.app/Contents/Java/tools-builder,/Applications/Arduino.app/Contents/Java/hardware/tools/avr,/Users/martinhinnerson/Library/Arduino15/packages"
+}
