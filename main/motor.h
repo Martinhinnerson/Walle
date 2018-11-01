@@ -7,7 +7,8 @@ class Motor
 {
   //Motor Pins
   int PWM_PIN;
-  int DIR_PIN;
+  int DIR_PIN1;
+  int DIR_PIN2;
   //Hall sensor variables
   int HALL_PIN;
   int HallVal, prev_HallVal;
@@ -19,7 +20,7 @@ class Motor
 public:
 
   Motor();
-  Motor(int pwm_pin, int dir_pin, int hall_pin, int id); //Constructor
+  Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id); //Constructor
   void runMotor(double speed);//Run the motor with dir and speed
   int readRpm();//read the rpm of the motor using hall sensor
 };

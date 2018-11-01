@@ -1,3 +1,4 @@
+
 /* ESP8266 with motor shield
 * This module serves as a motor controller and communication module
 */
@@ -55,7 +56,7 @@ int prev_leftHallVal = 0;
 int prev_rightHallVal = 0;
 int leftTime, cur_leftTime, rightTime, cur_rigthTime; //time variables
 //***********Radio******************
-
+//CPPM PIN 8
 //
 
 void setup()
@@ -95,11 +96,11 @@ void loop()
     Serial.println(joystick_x);
     */
   }
-  cppm_cycle();
+  //cppm_cycle();
   if (CPPM.synchronized())
   {
     joystick_y = CPPM.read_us(CPPM_THRO) - 1500;
-  //  Serial.println(throttle);
+    Serial.println(joystick_y);
     joystick_x = CPPM.read_us(CPPM_ELEV) - 1500; // rudder
   //Serial.println(rudd);
   }

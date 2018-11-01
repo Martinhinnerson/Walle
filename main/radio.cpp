@@ -21,34 +21,34 @@ void cppm_cycle(void)
     int gear = CPPM.read_us(CPPM_GEAR) - 1500; // gear
     int aux1 = CPPM.read_us(CPPM_AUX1) - 1500; // flap
     /*
-    #if 0
-    Serial.print(aile); Serial.print(", ");
-    Serial.print(elev); Serial.print(", ");
-    Serial.print(thro); Serial.print(", ");
-    Serial.print(rudd); Serial.print(", ");
-    Serial.print(gear); Serial.print(", ");
-    Serial.print(aux1); Serial.print("\n");
-    #else
-    for (int i=0; i<(CPPM_MSERVO + 2); i++) {
-    Serial.print('\t');
-    Serial.print(CPPM._sync2s[i]/2); // width of synch pulses
+      #if 0
+      Serial.print(aile); Serial.print(", ");
+      Serial.print(elev); Serial.print(", ");
+      Serial.print(thro); Serial.print(", ");
+      Serial.print(rudd); Serial.print(", ");
+      Serial.print(gear); Serial.print(", ");
+      Serial.print(aux1); Serial.print("\n");
+      #else
+      for (int i=0; i<(CPPM_MSERVO + 2); i++) {
+      Serial.print('\t');
+      Serial.print(CPPM._sync2s[i]/2); // width of synch pulses
+      }
+      Serial.println();
+      for (int i=0; i<(CPPM_MSERVO + 2); i++) {
+      Serial.print('\t');
+      Serial.print(CPPM._puls3s[i]/2); // width of servo pulses
+      }
+      Serial.println();
+      #endif*/
+
+    Serial.flush();
+
+    delay(100);
+
+    CPPM.received();
   }
-  Serial.println();
-  for (int i=0; i<(CPPM_MSERVO + 2); i++) {
-  Serial.print('\t');
-  Serial.print(CPPM._puls3s[i]/2); // width of servo pulses
-}
-Serial.println();
-#endif*/
-
-Serial.flush();
-
-delay(100);
-
-CPPM.received();
-}
-else
-{
-  // if not synchronized, do something...
-}
+  else
+  {
+    // if not synchronized, do something...
+  }
 }

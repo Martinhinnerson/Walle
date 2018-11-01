@@ -3,6 +3,6 @@
 
 #include <Arduino.h>
 
-void readRadioPins();
+void cppm_cycle();
 
 #endif

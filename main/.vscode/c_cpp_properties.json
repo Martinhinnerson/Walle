@@ -3,9 +3,11 @@
         {
             "name": "Mac",
             "includePath": [
+                "/Users/martinhinnerson/Documents/Arduino/libraries/jm_CPPM",
                 "/Users/martinhinnerson/Library/Arduino15/packages/arduino/tools/**",
                 "/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/**",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/Users/martinhinnerson/Documents/VSCode/Walle/main"
             ],
             "defines": [],
             "macFrameworkPath": [

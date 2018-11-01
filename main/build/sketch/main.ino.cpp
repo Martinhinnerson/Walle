@@ -1,16 +1,17 @@
 #line 1 "/Users/martinhinnerson/Documents/VSCode/Walle/main/main.ino"
 #line 1 "/Users/martinhinnerson/Documents/VSCode/Walle/main/main.ino"
+
 /* ESP8266 with motor shield
 * This module serves as a motor controller and communication module
 */
 //using namespace std;
 //**********INKLUDERINGAR**************************************
 #include "Arduino.h"
-//#include "motor.h"
+#include "motor.h"
 //#include "servoControl.h"
-//#include "communication.h"
-//#include "platform.h"
-#include <radio.h>
+#include "communication.h"
+#include "platform.h"
+#include "radio.h"
 #include <jm_CPPM.h>
 //*************INSTÄLLNIGNAR*********************************************
 #define rxBufferMax 100 //Storlek på buffer
@@ -57,7 +58,7 @@ int prev_leftHallVal = 0;
 int prev_rightHallVal = 0;
 int leftTime, cur_leftTime, rightTime, cur_rigthTime; //time variables
 //***********Radio******************
-
+//CPPM PIN 8
 //
 
 void setup()
@@ -97,7 +98,7 @@ void loop()
     Serial.println(joystick_x);
     */
   }
-  cppm_cycle();
+  CPPM.cycle();
   if (CPPM.synchronized())
   {
     joystick_y = CPPM.read_us(CPPM_THRO) - 1500;

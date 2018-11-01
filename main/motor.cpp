@@ -5,7 +5,8 @@
 Motor::Motor()
 {
   PWM_PIN = 0;
-  DIR_PIN = 0;
+  DIR_PIN1 = 0;
+  DIR_PIN2 = 0;
   HALL_PIN = 0;
   HallVal = 0;
   prev_HallVal = 0;
@@ -13,14 +14,16 @@ Motor::Motor()
   Id = 0;
 }
 
-Motor::Motor(int pwm_pin, int dir_pin, int hall_pin, int id)
+Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
 {
   PWM_PIN = pwm_pin;
-  DIR_PIN = dir_pin;
+  DIR_PIN1 = dir_pin1;
+  DIR_PIN2 = dir_pin2;
   HALL_PIN = hall_pin;
 
   pinMode(PWM_PIN, OUTPUT);
-  pinMode(DIR_PIN, OUTPUT);
+  pinMode(DIR_PIN1, OUTPUT);
+  pinMode(DIR_PIN2, OUTPUT);
   pinMode(HALL_PIN, INPUT);
 
   HallVal = 0;
@@ -31,10 +34,16 @@ Motor::Motor(int pwm_pin, int dir_pin, int hall_pin, int id)
 
 void Motor::runMotor(double speed)
 {
-  if(speed>=0) digitalWrite(DIR_PIN, HIGH);
-  else digitalWrite(DIR_PIN, LOW);
+  if(speed>=0){
+    digitalWrite(DIR_PIN1, HIGH);
+    digitalWrite(DIR_PIN2, LOW);
+  } 
+  else {
+    digitalWrite(DIR_PIN1, LOW);
+    digitalWrite(DIR_PIN2, HIGH);
+  }
   int pulseWidth = 0;
-  if (speed >0.05) {
+  if (abs(speed) >0.05) {
     pulseWidth = map(abs(speed)*100, 0, 100, 50, 255);
   }
 

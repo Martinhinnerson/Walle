@@ -4,8 +4,8 @@
 #include "math.h"
 
 
-volatile Motor motor1(5, 0, A0, 0);
-volatile Motor motor2(4, 2, A1, 1);
+volatile Motor motor1(5, 4, 3, A0, 0); //PWM DIR HALL ID
+volatile Motor motor2(6, 7, 11, A1, 1);
 
 
 void handleSteering(int joystick_x, int joystick_y)
