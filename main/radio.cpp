@@ -4,16 +4,22 @@
 
 int joystick_x = 512;
 int joystick_y = 512;
+int joystick_rot = 512;
 
 void cppm_cycle(void)
 {
   if (CPPM.synchronized())
   {
     joystick_y = CPPM.read_us(CPPM_THRO) - 1500;
-    //Serial.println(joystick_y);
     joystick_x = CPPM.read_us(CPPM_ELEV) - 1500;
-    //Serial.println(joystick_x);
-  }
+    joystick_rot = CPPM.read_us(CPPM_AILE) - 1500;
+    
+    #ifdef DEBUG_RADIO
+    Serial.println(joystick_y);
+    Serial.println(joystick_x);
+    Serial.println(joystick_x);
+    #endif
+  } 
 
 
 

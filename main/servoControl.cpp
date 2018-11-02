@@ -2,22 +2,24 @@
 #include "servoControl.h"
 //#include "servo.h"
 /*
-void setupServos()
-{/*
-  pinMode(doorServo, OUTPUT);
-  pinMode(neckServo, OUTPUT);
-  pinMode(leftEyeServo, OUTPUT);
-  pinMode(rightEyeServo, OUTPUT);
-  pinMode(leftArmServo, OUTPUT);
-  pinMode(rightArmServo, OUTPUT);
-}
+  Servo::Servo(int pwm_pin, int startAngle, int id){
+    _startAngle = startAngle;
+    _id = id;
+    PWM_PIN = pwm_pin;
+    pinMode(PWM_PIN, OUTPUT);
+    _angle = _startAngle;
+  }
 
-void writeAngle(int angle, Servo servo)
-{
-  servo.write(angle);
-}
+  void Servo::setAngle(int angle){
+    _angle = angle;
+  }
 
-int readAngle(Servo servo)
-{
-  return servo.read();
-}*/
+  int Servo::getAngle(){
+    return _angle;
+  }
+
+  void Servo::gotoAngle(){
+    byte pwmOut = map(_angle, 0, 360, 5, 250);
+    Serial.println(pwmOut);
+    analogWrite(PWM_PIN, pwmOut);
+  }*/

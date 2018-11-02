@@ -1,19 +1,26 @@
 #ifndef SERVO_CONTROL
 #define SERVO_CONTROL
-
+/*
 #include <Arduino.h>
 //#include "servo.h"
 
-#define doorServo 0
-#define neckServo 1
-#define leftEyeServo 2
-#define rightEyeServo 3
-#define leftArmServo 4
-#define rightArmServo 5
+#define rotationServo 0
 
-/*
-void setupServos();
-void writeAngle(int, Servo);
-int readAngle(Servo);
+class Servo
+{
+  //Motor Pins
+  int PWM_PIN;
+  int _id;
+  int _startAngle;
+  int _angle;
+
+public:
+
+  Servo(int pwm_pin, int startAngle, int id); //Constructor
+
+  void gotoAngle();//Set the angle of the servo 0-360
+  void setAngle(int angle);
+  int getAngle();
+};
 */
 #endif

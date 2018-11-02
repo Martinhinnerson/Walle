@@ -1,3 +1,6 @@
+
+
+
 /* ESP8266 with motor shield
 * This module serves as a motor controller and communication module
 */
@@ -12,9 +15,11 @@
 #include "communication.h"
 #include "platform.h"
 #include "radio.h"
+#include <Adafruit_SoftServo.h>
 //*************INSTÄLLNIGNAR*****************************
-
-
+//#define DEBUG_MOTORS 1
+//#define DEBUG_SERVOS 1
+//#define DEBUG_RADIO 1
 //***********Globala variabler, bufferts och flaggor*****
 
 //************WIFI*****************
@@ -69,8 +74,8 @@ void loop()
 {
   cppm_cycle();
   handleSteering(joystick_x, joystick_y);
+  //handleServos();
 
-  delay(10);
 /*
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();

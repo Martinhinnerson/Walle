@@ -5,5 +5,5 @@
 #include "motor.h"
 
 void handleSteering(int joystick_x, int joystick_y);
-
+void handleServos();
 #endif
