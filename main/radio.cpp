@@ -22,7 +22,6 @@ void cppm_cycle(void)
   } 
 
 
-
   /*if (CPPM.synchronized() && CPPM.received())
   {
     //		// good for DX8-R615X
