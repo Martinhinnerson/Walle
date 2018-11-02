@@ -2,9 +2,22 @@
 #include "radio.h"
 #include "jm_CPPM.h"
 
+int joystick_x = 512;
+int joystick_y = 512;
+
 void cppm_cycle(void)
 {
-  if (CPPM.synchronized() && CPPM.received())
+  if (CPPM.synchronized())
+  {
+    joystick_y = CPPM.read_us(CPPM_THRO) - 1500;
+    //Serial.println(joystick_y);
+    joystick_x = CPPM.read_us(CPPM_ELEV) - 1500;
+    //Serial.println(joystick_x);
+  }
+
+
+
+  /*if (CPPM.synchronized() && CPPM.received())
   {
     //		// good for DX8-R615X
     //		int aile = (CPPM.read(CPPM_AILE) - 1500*2) / 8 * 125 / 128; // aile -100% .. +100%
@@ -39,7 +52,7 @@ void cppm_cycle(void)
       Serial.print(CPPM._puls3s[i]/2); // width of servo pulses
       }
       Serial.println();
-      #endif*/
+      #endif
 
     Serial.flush();
 
@@ -50,5 +63,5 @@ void cppm_cycle(void)
   else
   {
     // if not synchronized, do something...
-  }
+  }*/
 }
