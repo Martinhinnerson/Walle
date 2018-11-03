@@ -20,7 +20,7 @@
 ** Microcontrollers for communication, drive, servo control, sensors
 
 ## GUI
-Will be written in Python using the kivy framework. Kivy can be installed according to: https://kivy.org/doc/stable/installation/installation-osx.html and will be developed using the version 1.1.1 found here: https://kivy.org/downloads/1.1.1/.
+Will be written in Python 3.7 using the kivy framework. Kivy can be installed by running: pip install kivy in a terminal (or python -m pip install kivy)
 * Connect to platform
 * Manual drive (Optional)
 * Visual representation of the map 2D in realtime
