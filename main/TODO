@@ -1,0 +1,14 @@
+Info:
+  Todo file for the main module of walle
+
+
+TODOs:
+  Add various todos here
+  ☐ Add serial communication support to talk to the WIFI module
+    the wifi module will talk to the computer and both recieve and send data
+  ☐ Emigrate the code to the Arduino Mega
+    ☐ The cppm library might have to be customized to support the mega
+
+BUGs:
+  Add bugs that needs to be fixed here
+

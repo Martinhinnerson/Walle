@@ -1,0 +1,11 @@
+INFO:
+  This module is mainly made to handle the wifi capabilities of walle
+
+  The module can currently host a wifi hotspot where you can connect and read a meassage in your browser
+
+TODOs:
+☐ Add support for serial communication to an arduino
+  This is so that it can reviece sensor data and others from the main controller and then forward it to the computer
+☐ Move WIFI code to separate files @started(18-11-05 18:11)
+  All the code is now in the main file
+☐ Reasearch more how to send and recieve data via WIFI

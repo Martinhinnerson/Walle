@@ -1,9 +1,3 @@
-
-
-
-/* ESP8266 with motor shield
-* This module serves as a motor controller and communication module
-*/
 //using namespace std;
 //**********LIBRARIES************************************
 #include "Arduino.h"
@@ -74,7 +68,7 @@ void loop()
 {
   cppm_cycle();
   handleSteering(joystick_x, joystick_y);
-  //handleServos();
+  //handleServos(); 
 
 /*
   if (Serial.available() > 0) {

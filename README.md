@@ -2,7 +2,7 @@
 
 ## Final goals
 
-* Autonomous drive and mapping of unknown environment 
+* Autonomous drive and mapping of unknown environment
 * Custom Pcb
 * Robot arm
 
@@ -12,13 +12,17 @@
 
 * ROS
 * Wireless communication
+
    WIFI
+
    Manual control from computer
 
 * Fully constructed platform
+  
    WIFI module (hotspot)
 
    3D printed hardware
+
    Microcontrollers for communication, drive, servo control, sensors
 
 ### GUI
