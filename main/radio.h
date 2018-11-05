@@ -7,6 +7,6 @@ extern int joystick_x;
 extern int joystick_x;
 extern int joystick_rot;
 
-void cppm_cycle();
+void updateRadio();
 
 #endif

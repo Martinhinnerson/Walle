@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "motor.h"
-//#include "servo.h"
 
 Motor::Motor()
 {
@@ -32,9 +31,9 @@ Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
   Id = id;
 }
 
-void Motor::runMotor(double speed)
+void Motor::runMotor()
 {
-  if(speed>=0){
+  if(_speed>=0){
     digitalWrite(DIR_PIN1, HIGH);
     digitalWrite(DIR_PIN2, LOW);
   } 
@@ -43,12 +42,20 @@ void Motor::runMotor(double speed)
     digitalWrite(DIR_PIN2, HIGH);
   }
   int pulseWidth = 0;
-  if (abs(speed) >0.05) {
-    pulseWidth = map(abs(speed)*100, 0, 100, 50, 255);
+  if (abs(_speed) >0.05) {
+    pulseWidth = map(abs(_speed)*100, 0, 100, 50, 255);
   }
 
   Serial.println(pulseWidth);
   analogWrite(PWM_PIN, pulseWidth);
+}
+
+void Motor::setSpeed(double speed){
+  _speed = speed;
+}
+
+int Motor::getSpeed(){
+  return _speed;
 }
 
 int Motor::readRpm()
