@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "motor.h"
-//#include "servo.h"
 
 Motor::Motor()
 {
@@ -11,7 +10,7 @@ Motor::Motor()
   HallVal = 0;
   prev_HallVal = 0;
   Time = 0;
-  Id = 0;
+  _id = 0;
 }
 
 Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
@@ -29,12 +28,12 @@ Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
   HallVal = 0;
   prev_HallVal = 0;
   Time = 0;
-  Id = id;
+  _id = id;
 }
 
-void Motor::runMotor(double speed)
+void Motor::runMotor()
 {
-  if(speed>=0){
+  if(_speed>=0){
     digitalWrite(DIR_PIN1, HIGH);
     digitalWrite(DIR_PIN2, LOW);
   } 
@@ -43,23 +42,31 @@ void Motor::runMotor(double speed)
     digitalWrite(DIR_PIN2, HIGH);
   }
   int pulseWidth = 0;
-  if (abs(speed) >0.05) {
-    pulseWidth = map(abs(speed)*100, 0, 100, 50, 255);
+  if (abs(_speed) >0.05) {
+    pulseWidth = map(abs(_speed)*100, 0, 100, 50, 255);
   }
 
   Serial.println(pulseWidth);
   analogWrite(PWM_PIN, pulseWidth);
 }
 
+void Motor::setSpeed(double speed){
+  _speed = speed;
+}
+
+int Motor::getSpeed(){
+  return _speed;
+}
+
 int Motor::readRpm()
 {
   int rpm;
   int sig = analogRead(HALL_PIN); //read raw value of hall sensor
-  HallVal = (sig > refsig); //convert it to digital 0,1 form
+  HallVal = (sig > _regsig); //convert it to digital 0,1 form
   if (prev_HallVal == 0 && HallVal == 1) { //check for rising edge
     curr_Time = micros();
     rpm = 1000000 * 60 / (curr_Time - Time);
-    Serial.println("Motor: " + Id);
+    Serial.println("Motor: " + _id);
     Serial.println(rpm); //print the rpm
     Time = micros();
   }
