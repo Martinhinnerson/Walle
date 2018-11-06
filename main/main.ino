@@ -13,15 +13,9 @@
 //#define DEBUG_SERVOS 1
 //#define DEBUG_RADIO 1
 //***********Controller Reciever******************
-extern int joystick_x;
-extern int joystick_y;
+
 //***********Communication******************
 
-//***********Motor Sensors******************
-int leftHallVal, rightHallVal;
-int prev_leftHallVal = 0;
-int prev_rightHallVal = 0;
-int leftTime, cur_leftTime, rightTime, cur_rigthTime; //time variables
 //***********Platform******************
 Platform walle; // instansiate the platform with the default constructor
 
@@ -33,7 +27,7 @@ void setup()
 
 void loop()
 {
-  //updateRadio();
-  walle.handleDriveFromRadio(joystick_x, joystick_y);
+  walle.readFromRadio();
+  walle.mapToMotors();
   walle.runMotors();
 }

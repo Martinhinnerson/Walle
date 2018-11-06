@@ -3,14 +3,12 @@
 #include "motor.h"
 #include "math.h"
 
-//This is old before the platform was turned into a class
-//volatile Motor motor2(3, 2, 4, A1, 1); //PWM DIR1 DIR2 HALL ID
-//volatile Motor motor1(6, 7, 5, A0, 0);
-
 Platform::Platform()
 {
     _speed = 0;
     _direction = 0;
+    _x = 0;
+    _y = 0;
     rightMotor = Motor::Motor(3, 2, 4, A1, 1);
     leftMotor = Motor::Motor(6, 7, 5, A0, 0);
     radioInput = Radio::Radio();
@@ -39,16 +37,19 @@ void Platform::runMotors()
     leftMotor.runMotor();
 }
 
-void Platform::handleDriveFromRadio(int joystick_x, int joystick_y)
+void Platform::readFromRadio()
 {
     radioInput.updateRadio();
-    //Map to -1, 1
-    double x = double(map(radioInput.getJoysticX(), -514, 514, -100, 100)) / 100;
-    double y = double(map(radioInput.getJoysticY(), -514, 514, -100, 100)) / 100;
+        //Map to -1, 1
+    _x = double(map(radioInput.getJoysticX(), -514, 514, -100, 100)) / 100;
+    _y = double(map(radioInput.getJoysticY(), -514, 514, -100, 100)) / 100;
+}
 
+void Platform::mapToMotors()
+{
     //Convert to polar
-    double r = hypot(y, x);
-    double t = atan2(y, x);
+    double r = hypot(_y, _x);
+    double t = atan2(_y, _x);
 
     //rotate by 45 degrees
     t -= 3.14 / 4;
@@ -70,9 +71,9 @@ void Platform::handleDriveFromRadio(int joystick_x, int joystick_y)
 
 #ifdef DEBUG_MOTORS
     Serial.print("Mapped: ");
-    Serial.print(y);
+    Serial.print(_y);
     Serial.print(", ");
-    Serial.println(x);
+    Serial.println(_x);
     Serial.print("Radius and angle: ");
     Serial.print(r);
     Serial.print(", ");

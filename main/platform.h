@@ -9,6 +9,8 @@ class Platform
 {
     double _speed;
     int _direction;
+    double _x;
+    double _y;
 
     Motor rightMotor;
     Motor leftMotor;
@@ -24,7 +26,8 @@ public:
     int getDirection();
     
     void runMotors();
-    void handleDriveFromRadio(int joystick_x, int joystick_y);
+    void mapToMotors();
+    void readFromRadio();
 };
 
 
