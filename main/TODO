@@ -1,25 +1,27 @@
 TODOs:
   Add various todos here
 
-  ☐ Add serial communication support to talk to the WIFI module
+  ☐ Add serial communication support to talk to the WIFI module @created(18-11-06 19:18)
     the wifi module will talk to the computer and both recieve and send data
-  ☐ Emigrate the code to the Arduino Mega
-    ☐ The cppm library might have to be customized to support the mega
-  ☐ Change motor handling so that it doesn't have to be driven with cppm @started(18-11-05 18:56)
-    This is so that the motors can be driven in an easy way during autonomous drive
-  ☐ Add accelerometer/gyro to the platform
+  ☐ Emigrate the code to the Arduino Mega @created(18-11-06 19:18)
+    ☐ The cppm library might have to be customized to support the mega @created(18-11-06 19:18)
+  ☐ Add accelerometer/gyro to the platform @created(18-11-06 19:17)
     Mainly to be able to control direction
     This will probably be done using a mpu6050
-  ☐ Test the new class implementation of the platform and the radio
+  ☐ Test the new class implementation of the platform and the radio @created(18-11-06 19:17)
     The code compiles but is not tested
-  ☐ Implement proximity sensors
-    ☐ Test the mini LIDAR
-    ☐ Test the sharp IR sensor
-    ☐ Create linear interpolation and calibrate the sensor data
+  ☐ Implement proximity sensors @created(18-11-06 19:17)
+    ☐ Test the mini LIDAR @created(18-11-06 19:17)
+    ☐ Test the sharp IR sensor @created(18-11-06 19:17)
+    ☐ Create linear interpolation and calibrate the sensor data @created(18-11-06 19:17)
       The sensors won't give linearly increasing values with distance
-  ☐ Add different modes for the platform
+  ☐ Add different modes for the platform @created(18-11-06 19:17)
     For examle manual, automatic driving, lidar sensor mode etc.
+  ☐ Comment already created code...@created(18-11-06 19:27)
+  
 Archive:
+  ✔ Change motor handling so that it doesn't have to be driven with cppm @started(18-11-05 18:56) @done(18-11-06 19:11) @lasted(1d15m56s) @project(TODOs)
+    This is so that the motors can be driven in an easy way during autonomous drive
   ✔ Move the radio class into the platform @started(18-11-06 14:11) @done(18-11-06 18:57) @lasted(4h46m45s) @project(TODOs)
     The radio is right now separate using global variables
   ✔ Make the platform into a class @started(18-11-06 11:51) @done(18-11-06 12:34) @lasted(43m29s) @project(TODOs)

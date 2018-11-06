@@ -4,8 +4,9 @@ INFO:
   The module can currently host a wifi hotspot where you can connect and read a meassage in your browser
 
 TODOs:
-☐ Add support for serial communication to an arduino
+☐ Add support for serial communication to an arduino @created(18-11-06 19:30)
   This is so that it can reviece sensor data and others from the main controller and then forward it to the computer
-☐ Move WIFI code to separate files @started(18-11-05 18:11)
+☐ Move WIFI code to separate files @created(18-11-06 19:30)
   All the code is now in the main file
-☐ Reasearch more how to send and recieve data via WIFI
+☐ Reasearch more how to send and recieve data via WIFI @created(18-11-06 19:30)
+☐ Add servo control @created(18-11-06 19:30)
