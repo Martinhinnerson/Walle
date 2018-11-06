@@ -3,17 +3,35 @@
 #include "motor.h"
 #include "math.h"
 
-extern int joystick_rot;
+//volatile Motor motor2(3, 2, 4, A1, 1); //PWM DIR1 DIR2 HALL ID
+//volatile Motor motor1(6, 7, 5, A0, 0);
 
-volatile Motor motor2(3, 2, 4, A1, 1); //PWM DIR1 DIR2 HALL ID
-volatile Motor motor1(6, 7, 5, A0, 0);
-
-void runMotors(){
-    motor1.runMotor();
-    motor2.runMotor();
+Platform::Platform(){
+    _speed = 0;
+    _direction = 0;
+    rightMotor = Motor::Motor(3, 2, 4, A1, 1);
+    leftMotor = Motor::Motor(6, 7, 5, A0, 0);
 }
 
-void handleDriveFromRadio(int joystick_x, int joystick_y)
+void Platform::setSpeed(double speed){
+    _speed = speed;
+}
+double Platform::getSpeed(){
+    return _speed;
+}
+void Platform::setDirection(int direction){
+    _direction = direction;
+}
+int Platform::getDirection(){
+    return _direction;
+}
+
+void Platform::runMotors(){
+    rightMotor.runMotor();
+    leftMotor.runMotor();
+}
+
+void Platform::handleDriveFromRadio(int joystick_x, int joystick_y)
 {
     //Map to -1, 1
     double x = double(map(joystick_x, -514, 514, -100, 100)) / 100;
@@ -49,8 +67,8 @@ void handleDriveFromRadio(int joystick_x, int joystick_y)
     left = max(-1, min(left, 1));
     right = max(-1, min(right, 1));
 
-    motor1.setSpeed(left);
-    motor2.setSpeed(right);
+    leftMotor.setSpeed(left);
+    rightMotor.setSpeed(right);
 
 #ifdef DEBUG_MOTORS
     Serial.print("Left: ");

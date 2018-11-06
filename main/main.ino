@@ -22,7 +22,8 @@ int leftHallVal, rightHallVal;
 int prev_leftHallVal = 0;
 int prev_rightHallVal = 0;
 int leftTime, cur_leftTime, rightTime, cur_rigthTime; //time variables
-//***********Radio******************
+//***********Platform******************
+Platform walle; // instansiate the platform with the default constructor
 
 void setup()
 {
@@ -33,6 +34,6 @@ void setup()
 void loop()
 {
   updateRadio();
-  handleDriveFromRadio(joystick_x, joystick_y);
-  runMotors();
+  walle.handleDriveFromRadio(joystick_x, joystick_y);
+  walle.runMotors();
 }
