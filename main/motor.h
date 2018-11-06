@@ -14,8 +14,8 @@ class Motor
   int HallVal, prev_HallVal;
   int Time, curr_Time; //time variables
 
-  int Id;
-  int refsig = 200; //for converting the analog signal coming from hall sensor to digital through arduino code
+  int _id;
+  int _regsig = 200; //for converting the analog signal coming from hall sensor to digital through arduino code
 
   double _speed = 0;
 

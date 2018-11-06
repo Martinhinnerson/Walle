@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "motor.h"
+#include "radio.h"
 
 class Platform
 {
@@ -11,6 +12,8 @@ class Platform
 
     Motor rightMotor;
     Motor leftMotor;
+
+    Radio radioInput;
 
 public:
     Platform();//constructor

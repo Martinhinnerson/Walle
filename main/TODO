@@ -12,9 +12,15 @@ TODOs:
     This will probably be done using a mpu6050
   ☐ Test the new class implementation of the platform
     The code compiles but is not tested
-  ☐ Move the radio class into the platform
+  ☐ Move the radio class into the platform @started(18-11-06 14:11)
     The radio is right now separate using global variables
-
+  ☐ Implement proximity sensors
+    ☐ Test the mini LIDAR
+    ☐ Test the sharp IR sensor
+    ☐ Create linear interpolation and calibrate the sensor data
+      The sensors won't give linearly increasing values with distance
+  ☐ Add different modes for the platform
+    For examle manual, automatic driving, lidar sensor mode etc.
 Archive:
   ✔ Make the platform into a class @started(18-11-06 11:51) @done(18-11-06 12:34) @lasted(43m29s) @project(TODOs)
     This is so that we can store speed, direction etc in the class

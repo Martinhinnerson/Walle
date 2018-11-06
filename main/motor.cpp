@@ -10,7 +10,7 @@ Motor::Motor()
   HallVal = 0;
   prev_HallVal = 0;
   Time = 0;
-  Id = 0;
+  _id = 0;
 }
 
 Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
@@ -28,7 +28,7 @@ Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
   HallVal = 0;
   prev_HallVal = 0;
   Time = 0;
-  Id = id;
+  _id = id;
 }
 
 void Motor::runMotor()
@@ -62,11 +62,11 @@ int Motor::readRpm()
 {
   int rpm;
   int sig = analogRead(HALL_PIN); //read raw value of hall sensor
-  HallVal = (sig > refsig); //convert it to digital 0,1 form
+  HallVal = (sig > _regsig); //convert it to digital 0,1 form
   if (prev_HallVal == 0 && HallVal == 1) { //check for rising edge
     curr_Time = micros();
     rpm = 1000000 * 60 / (curr_Time - Time);
-    Serial.println("Motor: " + Id);
+    Serial.println("Motor: " + _id);
     Serial.println(rpm); //print the rpm
     Time = micros();
   }

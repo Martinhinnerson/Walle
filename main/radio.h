@@ -3,10 +3,19 @@
 
 #include <Arduino.h>
 
-extern int joystick_x;
-extern int joystick_x;
-extern int joystick_rot;
+class Radio
+{
+    int _joystick_x;
+    int _joystick_y;
+    int _joystick_rot;
 
-void updateRadio();
+  public:
+    Radio();
+    void setJoysticInputs(int x, int y);
+    int getJoysticX();
+    int getJoysticY();
+    void updateRadio();
+    void test_cppm();
+};
 
 #endif

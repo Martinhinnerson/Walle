@@ -33,7 +33,7 @@ void setup()
 
 void loop()
 {
-  updateRadio();
+  //updateRadio();
   walle.handleDriveFromRadio(joystick_x, joystick_y);
   walle.runMotors();
 }
