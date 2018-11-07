@@ -3,7 +3,9 @@ INFO:
   Each of the submodules have their own todo file
 
 TODOs:
-  ☐ Change the paths for the arduino compilations so that is is not a local reference test123 @created(18-11-06 21:16)
+  ☐ Change the paths for the arduino compilations so that is is not a local reference @created(18-11-06 21:16)
     This is so that not only @Martinhinnerson can compile the arduino code
+
+
 
 
