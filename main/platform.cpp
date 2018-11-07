@@ -3,6 +3,7 @@
 #include "motor.h"
 #include "math.h"
 
+//Constructor
 Platform::Platform()
 {
     _speed = 0;
@@ -31,12 +32,14 @@ int Platform::getDirection()
     return _direction;
 }
 
+//Run the motors with their set speed
 void Platform::runMotors()
 {
     rightMotor.runMotor();
     leftMotor.runMotor();
 }
 
+//Read the values from the radio reciever and store them to _x, _y
 void Platform::readFromRadio()
 {
     radioInput.updateRadio();
@@ -45,6 +48,7 @@ void Platform::readFromRadio()
     _y = double(map(radioInput.getJoysticY(), -514, 514, -100, 100)) / 100;
 }
 
+//Map x and y to the motors
 void Platform::mapToMotors()
 {
     //Convert to polar

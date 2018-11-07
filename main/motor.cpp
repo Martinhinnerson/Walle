@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "motor.h"
 
+//Default constructor
 Motor::Motor()
 {
   PWM_PIN = 0;
@@ -12,7 +13,7 @@ Motor::Motor()
   Time = 0;
   _id = 0;
 }
-
+//Constructor
 Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
 {
   PWM_PIN = pwm_pin;
@@ -31,6 +32,19 @@ Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
   _id = id;
 }
 
+//Setter for the speed of the motor
+//The speed will be clamped to -1 and 1
+void Motor::setSpeed(double speed){
+  _speed = max(-1, min(speed, 1));
+}
+
+//getter for _speed
+int Motor::getSpeed(){
+  return _speed;
+}
+
+//Run the motor according to the _speed variable
+//The direction is also set depending on the _speed variable
 void Motor::runMotor()
 {
   if(_speed>=0){
@@ -45,19 +59,11 @@ void Motor::runMotor()
   if (abs(_speed) >0.05) {
     pulseWidth = map(abs(_speed)*100, 0, 100, 50, 255);
   }
-
-  Serial.println(pulseWidth);
   analogWrite(PWM_PIN, pulseWidth);
 }
 
-void Motor::setSpeed(double speed){
-  _speed = speed;
-}
-
-int Motor::getSpeed(){
-  return _speed;
-}
-
+//Read the rpm using hall sensors
+//NOT CURRENTLY ON THE PLATFORM
 int Motor::readRpm()
 {
   int rpm;

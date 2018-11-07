@@ -25,6 +25,7 @@ void setup()
   CPPM.begin();
 }
 
+/* Main loop */
 void loop()
 {
   walle.readFromRadio();

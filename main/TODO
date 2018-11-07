@@ -1,23 +1,23 @@
 TODOs:
   Add various todos here
-
-  ☐ Add serial communication support to talk to the WIFI module @created(18-11-06 19:18)
+  ☐ Add serial communication support to talk to the WIFI module
     the wifi module will talk to the computer and both recieve and send data
-  ☐ Emigrate the code to the Arduino Mega @created(18-11-06 19:18)
-    ☐ The cppm library might have to be customized to support the mega @created(18-11-06 19:18)
-  ☐ Add accelerometer/gyro/magnetometer to the platform @created(18-11-06 19:17)
+  ☐ Emigrate the code to the Arduino Mega
+    ☐ The cppm library might have to be customized to support the mega
+  ☐ Add accelerometer/gyro/magnetometer to the platform
     Mainly to be able to control direction
     This will probably be done using a gy-80
-  ☐ Test the new class implementation of the platform and the radio @created(18-11-06 19:17)
+  ☐ Test the new class implementation of the platform and the radio
     The code compiles but is not tested
-  ☐ Implement proximity sensors @created(18-11-06 19:17)
-    ☐ Test the mini LIDAR @created(18-11-06 19:17)
-    ☐ Test the sharp IR sensor @created(18-11-06 19:17)
-    ☐ Create linear interpolation and calibrate the sensor data @created(18-11-06 19:17)
+  Implement proximity sensors
+    ☐ Test the mini LIDAR
+    ☐ Test the sharp IR sensor
+    ☐ Create linear interpolation and calibrate the sensor data
       The sensors won't give linearly increasing values with distance
-  ☐ Add different modes for the platform @created(18-11-06 19:17)
+  ☐ Add different modes for the platform
     For examle manual, automatic driving, lidar sensor mode etc.
-  ☐ Comment already created code...@created(18-11-06 19:27) @project(TODOs)
+    This will basically be a state machine in the platform class.
+  ☐ Comment already created code.. @project(TODOs) @started(18-11-07 09:41)
 
 Archive:
   ✔ Change motor handling so that it doesn't have to be driven with cppm @started(18-11-05 18:56) @done(18-11-06 19:11) @lasted(1d15m56s) @project(TODOs)
