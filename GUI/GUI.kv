@@ -4,6 +4,7 @@
     add: add_button
     subtract: subtract_button
     status: status_bar
+    mission: mission_bar
     rows: 1
     BoxLayout:
         orientation: "vertical"
@@ -15,6 +16,8 @@
             on_release: root.subtract_one(subtract_button.decrement_value)
         StatusBar:
             id: status_bar
+        MissionBar:
+            id: mission_bar
     Label:
         id: display
         font_size: dp(50)

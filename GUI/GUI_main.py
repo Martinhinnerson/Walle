@@ -21,6 +21,7 @@ class GUIWidget(GridLayout):
     add = properties.ObjectProperty(None)
     subtract = properties.ObjectProperty(None)
     status = properties.ObjectProperty(None)
+    mission = properties.ObjectProperty(None)
     
     def add_one(self, increment):
         value = int(self.display.text)
@@ -43,7 +44,8 @@ class GUIWidget(GridLayout):
     def update(self, dt):
         speed = randint(0,10) # m/s
         direction = randint(0,360) # degree
-        self.set_status(self.status.connection, self.status.mission, speed, direction)
+        mission = self.mission.current_mission
+        self.set_status(self.status.connection, mission, speed, direction)
 
 
 class AddButton(Button):
@@ -61,6 +63,14 @@ class StatusBar(GridLayout):
     mission = properties.StringProperty("None")
     speed = properties.NumericProperty(0)
     direction = properties.NumericProperty(0)
+
+
+class MissionBar(GridLayout):
+    current_mission = properties.StringProperty("None")
+
+    def set_mission(self, mission):
+        self.current_mission = mission
+
 
 class GUIApp(App):
     def build(self):
