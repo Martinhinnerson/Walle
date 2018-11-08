@@ -1,4 +1,5 @@
 import kivy
+import kivy.properties as properties
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
@@ -7,7 +8,6 @@ from kivy.clock import Clock
 from random import randint
 from kivy.uix.button import Button
 from os import listdir 
-from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
 # Load all .kv files from /kv
@@ -17,29 +17,59 @@ for kv in listdir(kv_path):
 
 
 class GUIWidget(GridLayout):
-    display = ObjectProperty()
+    display = properties.ObjectProperty()
+    add = properties.ObjectProperty(None)
+    subtract = properties.ObjectProperty(None)
+    status = properties.ObjectProperty(None)
     
-    def add_one(self):
+    def add_one(self, increment):
         value = int(self.display.text)
-        self.display.text = str(value+1)
+        self.display.text = str(value+increment)
 
-    def subtract_one(self):
+    def subtract_one(self, decrement):
         value = int(self.display.text)
-        self.display.text = str(value-1)
+        self.display.text = str(value-decrement)
+
+    def set_button_values(self, increase, decrease):
+        self.add.increment_value = increase
+        self.subtract.decrement_value = decrease
+
+    def set_status(self, connection, mission, speed, direction):
+        self.status.connection = connection
+        self.status.mission = mission
+        self.status.speed = speed
+        self.status.direction = direction
+
+    def update(self, dt):
+        speed = randint(0,10) # m/s
+        direction = randint(0,360) # degree
+        self.set_status(self.status.connection, self.status.mission, speed, direction)
 
 
 class AddButton(Button):
-    pass
+    increment_value = properties.NumericProperty(0)
+    # value = properties.ReferenceListProperty(increment_value)
 
 
 class SubtractButton(Button):
-    pass
+    decrement_value = properties.NumericProperty(0)
+    # value = properties.ReferenceListProperty(decrement_value)
+
+
+class StatusBar(GridLayout):
+    connection = properties.StringProperty("")
+    mission = properties.StringProperty("None")
+    speed = properties.NumericProperty(0)
+    direction = properties.NumericProperty(0)
 
 class GUIApp(App):
     def build(self):
         self.title = "Dank GUI"
         GUI = GUIWidget()
-        return GUI    
+        GUI.set_button_values(2,2)
+        GUI.set_status("None", "None", 0, 0)
+        Clock.schedule_interval(GUI.update, 1.0 / 60.0)
+        return GUI
 
 
 if __name__ == "__main__":

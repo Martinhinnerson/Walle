@@ -1,6 +1,6 @@
 #:kivy 1.0.9
 <AddButton>:
-    text: "+1"
+    text: "{}".format(self.increment_value)
 
 <SubtractButton>:
-    text: "-1"
+    text: "-{}".format(self.decrement_value)

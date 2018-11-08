@@ -1,0 +1,16 @@
+#:kivy 1.0.9
+<StatusBar>:
+    rows: 2
+    colums: 2
+    Label:
+        id: connection
+        text: "Connection: %s" % root.connection
+    Label:
+        id: mission
+        text: "Mission: %s" % root.mission
+    Label:
+        id: speed
+        text: "Speed: {}".format(root.speed)
+    Label:
+        id: direction
+        text: "Direction: {}".format(root.direction)

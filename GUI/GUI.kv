@@ -1,13 +1,20 @@
 #:kivy 1.0.9
 <GUIWidget>:
     display: display
+    add: add_button
+    subtract: subtract_button
+    status: status_bar
     rows: 1
     BoxLayout:
         orientation: "vertical"
         AddButton:
-            on_release: root.add_one()
+            id: add_button
+            on_release: root.add_one(add_button.increment_value)
         SubtractButton:
-            on_release: root.subtract_one()
+            id: subtract_button
+            on_release: root.subtract_one(subtract_button.decrement_value)
+        StatusBar:
+            id: status_bar
     Label:
         id: display
         font_size: dp(50)
