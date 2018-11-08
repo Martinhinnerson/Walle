@@ -1,0 +1,5 @@
+TODOs:
+    Add GUI tasks here.
+    ☐ Make the serial values printable in the GUI
+        Right now I can print to the terminal but can't manage to convert the input to the
+        correct datatype because i suck at python...

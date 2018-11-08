@@ -9,6 +9,9 @@ from random import randint
 from kivy.uix.button import Button
 from os import listdir 
 from kivy.lang import Builder
+import serial
+import os
+import struct
 
 # Load all .kv files from /kv
 kv_path = './kv/'
@@ -47,6 +50,10 @@ class GUIWidget(GridLayout):
         mission = self.mission.current_mission
         self.set_status(self.status.connection, mission, speed, direction)
 
+    def readSerial(self, dt):
+        data = ser.readline()
+        #f_data, = struct.unpack('<f',data)
+        print(data[0:5])
 
 class AddButton(Button):
     increment_value = properties.NumericProperty(0)
@@ -71,14 +78,25 @@ class MissionBar(GridLayout):
     def set_mission(self, mission):
         self.current_mission = mission
 
+#Define serial port
+ser = serial.Serial(
+    port='/dev/cu.usbmodem141401',\
+    baudrate=9600,\
+    parity=serial.PARITY_NONE,\
+    stopbits=serial.STOPBITS_ONE,\
+    bytesize=serial.EIGHTBITS,\
+        timeout=0)
 
 class GUIApp(App):
     def build(self):
         self.title = "Dank GUI"
+
         GUI = GUIWidget()
         GUI.set_button_values(2,2)
         GUI.set_status("None", "None", 0, 0)
+        #Clock.schedule_interval(GUI.readSerial, 1.0 / 60.0) # Reads from serial port
         Clock.schedule_interval(GUI.update, 1.0 / 60.0)
+
         return GUI
 
 
