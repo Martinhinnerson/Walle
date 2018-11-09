@@ -3,3 +3,5 @@ TODOs:
     ☐ Make the serial values printable in the GUI
         Right now I can print to the terminal but can't manage to convert the input to the
         correct datatype because i suck at python...
+    ☐ Variable 'ser' is global, move to main class or status class?
+    
