@@ -9,9 +9,9 @@ from random import randint
 from kivy.uix.button import Button
 from os import listdir 
 from kivy.lang import Builder
+
+#This is for PySerial
 import serial
-import os
-import struct
 
 # Load all .kv files from /kv
 kv_path = './kv/'
@@ -46,14 +46,17 @@ class GUIWidget(GridLayout):
 
     def update(self, dt):
         speed = randint(0,10) # m/s
-        direction = randint(0,360) # degree
+
+        #I CALL THE FUNCTION I MADE HERE, THIS DOESNT WORK
+        direction = self.readSerial(1) #randint(0,360) # degree 
         mission = self.mission.current_mission
         self.set_status(self.status.connection, mission, speed, direction)
 
+    #I MADE THIS FUNCTION
     def readSerial(self, dt):
-        data = ser.readline()
-        #f_data, = struct.unpack('<f',data)
-        print(data[0:5])
+        direction = ser.readline().decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
+        print(direction)
+        return direction
 
 class AddButton(Button):
     increment_value = properties.NumericProperty(0)
@@ -69,7 +72,7 @@ class StatusBar(GridLayout):
     connection = properties.StringProperty("")
     mission = properties.StringProperty("None")
     speed = properties.NumericProperty(0)
-    direction = properties.NumericProperty(0)
+    direction = properties.StringProperty("") #NumericProperty(0)     # I CHANGED THIS TO StringProperty but still doesn't work
 
 
 class MissionBar(GridLayout):
@@ -94,7 +97,7 @@ class GUIApp(App):
         GUI = GUIWidget()
         GUI.set_button_values(2,2)
         GUI.set_status("None", "None", 0, 0)
-        #Clock.schedule_interval(GUI.readSerial, 1.0 / 60.0) # Reads from serial port
+        Clock.schedule_interval(GUI.readSerial, 1.0 / 60.0) # Reads from serial port
         Clock.schedule_interval(GUI.update, 1.0 / 60.0)
 
         return GUI
