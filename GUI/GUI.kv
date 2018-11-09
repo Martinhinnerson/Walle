@@ -5,7 +5,8 @@
     subtract: subtract_button
     status: status_bar
     mission: mission_bar
-    rows: 1
+    map: map_widget
+    rows: 2
     BoxLayout:
         orientation: "vertical"
         AddButton:
@@ -18,6 +19,10 @@
             id: status_bar
         MissionBar:
             id: mission_bar
+    BoxLayout:
+        orientation: "vertical"
+        MapWidget:
+            id: map_widget
     Label:
         id: display
         font_size: dp(50)
