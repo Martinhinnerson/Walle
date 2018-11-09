@@ -1,5 +1,10 @@
+# Full imports
 import kivy
+import serial
+import os
+import struct
 import kivy.properties as properties
+# Specific imports
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
@@ -9,9 +14,9 @@ from random import randint
 from kivy.uix.button import Button
 from os import listdir 
 from kivy.lang import Builder
-import serial
-import os
-import struct
+from kivy.graphics import Color, Ellipse, Line, Rectangle
+from kivy.uix.video import Video
+
 
 # Load all .kv files from /kv
 kv_path = './kv/'
@@ -25,7 +30,8 @@ class GUIWidget(GridLayout):
     subtract = properties.ObjectProperty(None)
     status = properties.ObjectProperty(None)
     mission = properties.ObjectProperty(None)
-    
+    map = properties.ObjectProperty(None)
+
     def add_one(self, increment):
         value = int(self.display.text)
         self.display.text = str(value+increment)
@@ -44,16 +50,29 @@ class GUIWidget(GridLayout):
         self.status.speed = speed
         self.status.direction = direction
 
+    def update_mission(self, mission):
+        if mission == "Mission 1" and not self.map.gnomed:
+            # print("You've been gnomed")
+            # Birb time
+            self.map.show_image()
+        elif mission != "Mission 1" and self.map.gnomed:
+            # print("Remove gnome")
+            self.map.remove_image()
+
     def update(self, dt):
         speed = randint(0,10) # m/s
         direction = randint(0,360) # degree
         mission = self.mission.current_mission
-        self.set_status(self.status.connection, mission, speed, direction)
 
-    def readSerial(self, dt):
-        data = ser.readline()
-        #f_data, = struct.unpack('<f',data)
-        print(data[0:5])
+        self.set_status(self.status.connection, mission, speed, direction)
+        self.update_mission(mission)
+
+
+    # def readSerial(self, dt):
+    #     data = ser.readline()
+    #     #f_data, = struct.unpack('<f',data)
+    #     print(data[0:5])
+
 
 class AddButton(Button):
     increment_value = properties.NumericProperty(0)
@@ -63,6 +82,54 @@ class AddButton(Button):
 class SubtractButton(Button):
     decrement_value = properties.NumericProperty(0)
     # value = properties.ReferenceListProperty(decrement_value)
+
+
+class MapWidget(Widget):
+    gnomed = properties.BooleanProperty(False)
+
+    def show_image(self):
+        with self.canvas:
+            self.gnomed = True
+            Color(1,1,1)
+            Rectangle(source="gnome.png", pos=self.pos, size=self.size)
+        
+    def remove_image(self):
+        with self.canvas:
+            if self.gnomed:
+                self.gnomed = False
+                Color(0,0,0)
+                Rectangle(pos=self.pos, size=self.size)
+
+    def on_touch_down(self, touch):
+        if self.inside_widget(touch):
+            with self.canvas:
+                color = Color([1, 1, 0])
+                d = 30.
+                Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
+                touch.ud['line'] = Line(points=(touch.x, touch.y))
+
+    def on_touch_move(self, touch):
+        if self.inside_widget(touch):   
+            touch.ud['line'].points += [touch.x, touch.y]
+
+
+    def on_touch_up(self, touch):      
+        if self.inside_widget(touch):
+            with self.canvas:
+                self.inside_widget(touch)
+                color = Color([1, 1, 0])
+                d = 30.
+                Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
+    
+    def inside_widget(self, touch):
+        bottom_left_x = self.center_x - self.width/2
+        bottom_left_y = self.center_y - self.height/2
+        top_right_x = self.center_x + self.width/2
+        top_right_y = self.center_y + self.height/2
+        x = touch.pos[0]
+        y = touch.pos[1]
+        
+        return x >= bottom_left_x and x <= top_right_x and y >= bottom_left_y and y <= top_right_y
 
 
 class StatusBar(GridLayout):
@@ -79,13 +146,8 @@ class MissionBar(GridLayout):
         self.current_mission = mission
 
 #Define serial port
-ser = serial.Serial(
-    port='/dev/cu.usbmodem141401',\
-    baudrate=9600,\
-    parity=serial.PARITY_NONE,\
-    stopbits=serial.STOPBITS_ONE,\
-    bytesize=serial.EIGHTBITS,\
-        timeout=0)
+# ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=9600, parity=serial.PARITY_NONE,
+#                     stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
 
 class GUIApp(App):
     def build(self):
