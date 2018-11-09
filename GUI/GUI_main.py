@@ -14,15 +14,12 @@ from random import randint
 from kivy.uix.button import Button
 from os import listdir 
 from kivy.lang import Builder
-<<<<<<< HEAD
 
 #This is for PySerial
 import serial
-=======
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.uix.video import Video
 
->>>>>>> 1473518217eb8713b2f6343bbdf1f6955e1ef0f7
 
 # Load all .kv files from /kv
 kv_path = './kv/'
@@ -81,14 +78,11 @@ class GUIWidget(GridLayout):
     #     #f_data, = struct.unpack('<f',data)
     #     print(data[0:5])
 
-<<<<<<< HEAD
     #I MADE THIS FUNCTION
     def readSerial(self, dt):
         direction = ser.readline().decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
         print(direction)
         return direction
-=======
->>>>>>> 1473518217eb8713b2f6343bbdf1f6955e1ef0f7
 
 class AddButton(Button):
     increment_value = properties.NumericProperty(0)
