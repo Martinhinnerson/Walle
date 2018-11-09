@@ -35,6 +35,9 @@ class GUIWidget(GridLayout):
     mission = properties.ObjectProperty(None)
     map = properties.ObjectProperty(None)
 
+    def get_direction(self):
+        return self.status.get_dir()
+
     def add_one(self, increment):
         value = int(self.display.text)
         self.display.text = str(value+increment)
@@ -64,25 +67,27 @@ class GUIWidget(GridLayout):
 
     def update(self, dt):
         speed = randint(0,10) # m/s
+  
+        dir = self.readSerial(1)
+        try:
+            # This will make it a float, if the string is not a float it will throw an error
+            print(dir)
+            direction = float(dir)
+            
+        except ValueError: # this deals will the error
+            direction = self.get_direction() # if we don't change the value we read the old one
 
-        #I CALL THE FUNCTION I MADE HERE, THIS DOESNT WORK
-        direction = self.readSerial(1) #randint(0,360) # degree 
         mission = self.mission.current_mission
 
         self.set_status(self.status.connection, mission, speed, direction)
         self.update_mission(mission)
 
-
-    # def readSerial(self, dt):
-    #     data = ser.readline()
-    #     #f_data, = struct.unpack('<f',data)
-    #     print(data[0:5])
-
-    #I MADE THIS FUNCTION
     def readSerial(self, dt):
         direction = ser.readline().decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
-        print(direction)
         return direction
+        
+        
+        
 
 class AddButton(Button):
     increment_value = properties.NumericProperty(0)
@@ -146,7 +151,10 @@ class StatusBar(GridLayout):
     connection = properties.StringProperty("")
     mission = properties.StringProperty("None")
     speed = properties.NumericProperty(0)
-    direction = properties.StringProperty("") #NumericProperty(0)     # I CHANGED THIS TO StringProperty but still doesn't work
+    direction = properties.NumericProperty(0)   
+
+    def get_dir(self):
+        return self.direction
 
 
 class MissionBar(GridLayout):
@@ -156,8 +164,8 @@ class MissionBar(GridLayout):
         self.current_mission = mission
 
 #Define serial port
-# ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=9600, parity=serial.PARITY_NONE,
-#                     stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
+ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=9600, parity=serial.PARITY_NONE,
+                     stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
 
 class GUIApp(App):
     def build(self):
@@ -166,7 +174,7 @@ class GUIApp(App):
         GUI = GUIWidget()
         GUI.set_button_values(2,2)
         GUI.set_status("None", "None", 0, 0)
-        Clock.schedule_interval(GUI.readSerial, 1.0 / 60.0) # Reads from serial port
+        #Clock.schedule_interval(GUI.readSerial, 1.0 / 60.0) # Reads from serial port
         Clock.schedule_interval(GUI.update, 1.0 / 60.0)
 
         return GUI
