@@ -9,12 +9,9 @@ TODOs:
   ☐ Add accelerometer/gyro/magnetometer to the platform
     Mainly to be able to control direction
     This will probably be done using a gy-80
-    ☐ Implement the GY-85 Magnetometer in a class
-      ☐ Embedd the sensor data in a good way to be able to send it easy
-        Should we send chars/int/double/float?
   ☐ Test the new class implementation of the platform and the radio
     The code compiles but is not tested
-  Implement proximity sensors
+  ☐ Implement proximity sensors
     ☐ Test the mini LIDAR
     ☐ Test the sharp IR sensor
     ☐ Create linear interpolation and calibrate the sensor data
@@ -23,8 +20,14 @@ TODOs:
     For examle manual, automatic driving, lidar sensor mode etc.
     This will basically be a state machine in the platform class.
   ☐ Comment already created code.. @project(TODOs) @started(18-11-07 09:41)
-  
+  ☐ Implement a timer class that can keep track of timers
+    This can be usefull if we want to do certain tasks only once in a while
+    like for example reading a sensor or sending the sensor value to the GUI
+
 Archive:
+  ✔ Implement the GY-85 Magnetometer in a class @started(18-11-09 22:22) @done(18-11-09 22:22) @lasted(29s) @project(TODOs)
+  ✔ Embedd the sensor data in a good way to be able to send it easy @started(18-11-09 21:22) @done(18-11-09 22:22) @lasted(1h44s) @project(TODOs)
+    Should we send chars/int/double/float?
   ✔ Change motor handling so that it doesn't have to be driven with cppm @started(18-11-05 18:56) @done(18-11-06 19:11) @lasted(1d15m56s) @project(TODOs)
     This is so that the motors can be driven in an easy way during autonomous drive
   ✔ Move the radio class into the platform @started(18-11-06 14:11) @done(18-11-06 18:57) @lasted(4h46m45s) @project(TODOs)

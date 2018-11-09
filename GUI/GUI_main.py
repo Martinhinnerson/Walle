@@ -37,7 +37,7 @@ class GUIWidget(GridLayout):
     map = properties.ObjectProperty(None)
 
     #Define serial port
-    ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=9600, parity=serial.PARITY_NONE,
+    ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=115200, parity=serial.PARITY_NONE,
                      stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=5)
 
     def get_direction(self):
@@ -72,7 +72,8 @@ class GUIWidget(GridLayout):
 
     def update(self, dt):
         speed = randint(0,10) # m/s
-  
+        mission = self.mission.current_mission
+        
         dir = self.readSerial(1)
         try:
             # This will make it a float, if the string is not a float it will throw an error
@@ -82,7 +83,7 @@ class GUIWidget(GridLayout):
         except ValueError: # this deals will the error
             direction = self.get_direction() # if we don't change the value we read the old one
 
-        mission = self.mission.current_mission
+        
 
         self.set_status(self.status.connection, mission, speed, direction)
         self.update_mission(mission)
