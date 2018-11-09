@@ -11,6 +11,8 @@ TODOs:
         We first have to decide on the platform side of it how we want to send stuff.
         We should probably implement some type of packet based communication
 Archive:
+  ✔ Variable 'ser' is global, move to main class or status class? @done(18-11-09 22:27) @project(TODOs)
   ✔ Make the serial values printable in the GUI @done(18-11-09 21:03) @project(TODOs)
     Right now I can print to the terminal but can't manage to convert the input to the
     correct datatype because i suck at python...
+    

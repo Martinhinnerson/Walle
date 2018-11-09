@@ -61,32 +61,24 @@ class GUIWidget(GridLayout):
         self.status.speed = speed
         self.status.direction = direction
 
-    def update_mission(self, mission):
-        if mission == "Mission 1" and not self.map.gnomed:
-            # print("You've been gnomed")
-            # Birb time
-            self.map.show_image()
-        elif mission != "Mission 1" and self.map.gnomed:
-            # print("Remove gnome")
-            self.map.remove_image()
 
     def update(self, dt):
         speed = randint(0,10) # m/s
-        mission = self.mission.current_mission
-        
-        dir = self.readSerial(1)
-        try:
-            # This will make it a float, if the string is not a float it will throw an error
-            print(dir)
-            direction = float(dir)
+  
+        # dir = self.readSerial(1)
+        # try:
+        #     # This will make it a float, if the string is not a float it will throw an error
+        #     print(dir)
+        #     direction = float(dir)
             
-        except ValueError: # this deals will the error
-            direction = self.get_direction() # if we don't change the value we read the old one
+        # except ValueError: # this deals will the error
+        #     direction = self.get_direction() # if we don't change the value we read the old one
 
         
+        mission = self.mission.current_mission
+        direction = self.get_direction()
 
         self.set_status(self.status.connection, mission, speed, direction)
-        self.update_mission(mission)
 
     def readSerial(self, dt):
         direction = self.ser.readline().decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
@@ -106,39 +98,29 @@ class SubtractButton(Button):
 
 
 class MapWidget(Widget):
-    gnomed = properties.BooleanProperty(False)
-
-    def show_image(self):
-        with self.canvas:
-            self.gnomed = True
-            Color(1,1,1)
-            Rectangle(source="gnome.png", pos=self.pos, size=self.size)
-        
-    def remove_image(self):
-        with self.canvas:
-            if self.gnomed:
-                self.gnomed = False
-                Color(0,0,0)
-                Rectangle(pos=self.pos, size=self.size)
+    draw_color = properties.ListProperty()
+    background = properties.ListProperty([1, 0, 1])
 
     def on_touch_down(self, touch):
         if self.inside_widget(touch):
             with self.canvas:
-                color = Color([1, 1, 0])
+                Color(self.draw_color)
+                print(self.draw_color, self.background)
                 d = 30.
                 Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
                 touch.ud['line'] = Line(points=(touch.x, touch.y))
 
     def on_touch_move(self, touch):
-        if self.inside_widget(touch):   
+        if self.inside_widget(touch):  
+            Color(self.draw_color) 
             touch.ud['line'].points += [touch.x, touch.y]
 
 
     def on_touch_up(self, touch):      
         if self.inside_widget(touch):
             with self.canvas:
+                Color(self.draw_color)
                 self.inside_widget(touch)
-                color = Color([1, 1, 0])
                 d = 30.
                 Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
     
