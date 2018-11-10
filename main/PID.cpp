@@ -58,7 +58,7 @@ float PID::calculate(float sp, float fb)
 
     if (_Kp)
     {
-        P = _Kp * (err - _last_err);
+        P = _Kp * (err - _err_k_1);
     }
 
     if (_Ki)

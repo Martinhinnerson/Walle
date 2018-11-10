@@ -28,6 +28,9 @@ TODOs:
     The one we have is a Adafruit Mini Audio FX board 16Mb
   ☐ Add an LCD screen for information, status, mode etc.
     The one we have is a BT21605AV which uses I2C communication
+  ☐ Make it so that the radio reciever is diabled if the controller is not turned on
+    Right now if the controller is not on when the platform is on weird things can happen
+    The platform should be able to sense when there is not radio signals being recieved
 
   PID:
     ☐ Add support for wraparound

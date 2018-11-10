@@ -3,10 +3,10 @@
         {
             "name": "Mac",
             "includePath": [
-                "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.2/**",
+                /* "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.2/**",
                 "/Users/martinhinnerson/Documents/Arduino/libraries/PacketSerial/src",
                 "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/tools/**",
-                "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/hardware/esp8266/2.3.0/**"
+                "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/hardware/esp8266/2.3.0/**" */
             ],
             "forcedInclude": [],
             "macFrameworkPath": [
