@@ -2,14 +2,19 @@
 #include "platform.h"
 #include "motor.h"
 #include "math.h"
+#include <FastPID.h>
 
 //Constructor
 Platform::Platform()
 {
     _speed = 0;
     _direction = 0;
+    _heading = 0;
     _x = 0;
     _y = 0;
+
+    rotationPID = PID(5, 0, 0); //Kp Ki Kd Hz output_bits output_signed
+    
     rightMotor = Motor::Motor(3, 2, 4, A1, 1);
     leftMotor = Motor::Motor(6, 7, 5, A0, 0);
     radioInput = Radio::Radio();
@@ -23,8 +28,11 @@ void Platform::begin()
     {
         /* There was a problem detecting the HMC5883 ... check your connections */
         Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
-        while (1)
-            ;
+        while (1);
+    }
+    if(rotationPID.err()){
+        Serial.println("There was a configuration error with the rotationPID");
+        while(1);
     }
 }
 
@@ -109,11 +117,6 @@ void Platform::setHeading()
     sensors_event_t event;
     compass.getEvent(&event);
 
-    /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-    //Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
-    //Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
-    //Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
-
     // Hold the module so that Z is pointing 'up' and you can measure the heading with x&y
     // Calculate heading when the magnetometer is level, then correct for signs of axis.
     float heading = atan2(event.magnetic.y, event.magnetic.x);
@@ -137,6 +140,10 @@ void Platform::setHeading()
     int headingDegrees = heading * 180 / M_PI;
 
     #ifdef DEBUG_COMPASS
+    /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
+    Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
+    Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
+    Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
     Serial.print("Heading (degrees): ");
     Serial.println(headingDegrees);
     #endif
@@ -171,4 +178,10 @@ void Platform::displaySensorDetails()
     Serial.println("------------------------------------");
     Serial.println("");
     delay(500);
+}
+
+void Platform::rotateTo(int setPoint){
+    int feedback = _heading;
+    uint8_t output = rotationPID.calculate(setPoint, feedback);
+    _direction += output;
 }

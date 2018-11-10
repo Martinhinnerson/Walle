@@ -37,8 +37,7 @@ class GUIWidget(GridLayout):
     map = properties.ObjectProperty(None)
 
     #Define serial port
-    ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=115200, parity=serial.PARITY_NONE,
-                     stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=5)
+    #ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=115200, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=5)
 
     def get_direction(self):
         return self.status.get_dir()
@@ -81,7 +80,7 @@ class GUIWidget(GridLayout):
         self.set_status(self.status.connection, mission, speed, direction)
 
     def readSerial(self, dt):
-        direction = self.ser.readline().decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
+        direction = 0#self.ser.readline().decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
         return direction
         
         

@@ -6,11 +6,8 @@ TODOs:
     It would be nice to have one unit controlling gathering and sending of the sendor data
   ☐ Emigrate the code to the Arduino Mega
     ☐ The cppm library might have to be customized to support the mega
-  ☐ Add accelerometer/gyro/magnetometer to the platform
-    Mainly to be able to control direction
-    This will probably be done using a gy-80
-  ☐ Test the new class implementation of the platform and the radio
-    The code compiles but is not tested
+  ☐ Add accelerometer/gyro to the platform
+    These two might not be that neccesary so the priority is not that high
   ☐ Implement proximity sensors
     ☐ Test the mini LIDAR
     ☐ Test the sharp IR sensor
@@ -20,11 +17,21 @@ TODOs:
     For examle manual, automatic driving, lidar sensor mode etc.
     This will basically be a state machine in the platform class.
   ☐ Comment already created code.. @project(TODOs) @started(18-11-07 09:41)
+    This is a stupid task and it should be done when the code is written...
   ☐ Implement a timer class that can keep track of timers
     This can be usefull if we want to do certain tasks only once in a while
     like for example reading a sensor or sending the sensor value to the GUI
-
+  ☐ Implement the stepper motor for the lidar system
+    It will be controlled with an H-bridge and probably the accelStepper library
+  ☐ Implement the sound card to bea able to play sounds
+    The one we have is a Adafruit Mini Audio FX board 16Mb
+  ☐ Add an LCD screen for information, status, mode etc.
+    The one we have is a BT21605AV which uses I2C communication
+  ☐ Create PID class so that we can create and use PID controllers for the platform @started(18-11-10 12:44)
+    The first one i want is one that rotates the robot to a certain heading and uses the compass as the feedback
 Archive:
+  ✔ Test the new class implementation of the platform and the radio @done(18-11-10 11:25) @project(TODOs)
+    The code compiles but is not tested
   ✔ Implement the GY-85 Magnetometer in a class @started(18-11-09 22:22) @done(18-11-09 22:22) @lasted(29s) @project(TODOs)
   ✔ Embedd the sensor data in a good way to be able to send it easy @started(18-11-09 21:22) @done(18-11-09 22:22) @lasted(1h44s) @project(TODOs)
     Should we send chars/int/double/float?
