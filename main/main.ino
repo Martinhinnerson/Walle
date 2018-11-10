@@ -35,9 +35,6 @@ void setup()
   
 }
 
-
-int heading;
-
 /* Main loop */
 void loop()
 {
