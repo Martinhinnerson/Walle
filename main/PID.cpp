@@ -41,29 +41,47 @@ bool PID::err()
 }
 
 //This function will most likely vary depending on what we want to control
-float PID::calculate(float sp, float fb) {
+float PID::calculate(float sp, float fb)
+{
 
-  float err = sp - fb; //This should be modified for certain behaviour, eg. wraparoud
-  float P = 0, I = 0, D = 0;
+    float err = sp - fb; 
+    MOD(err); //The modulo function defined in PID.h wraps around the value because
+    //we always want to rotate the closest direction
 
-  if (_p) {
-    P = _p * err;
-  }
+    float P = 0, I = 0, D = 0;
 
-  if (_i) {
-    _sum += err * _i; //We might have to check for overflow here
-    I = _sum;
-  }
+    if (_p)
+    {
+        P = _p * err;
+    }
 
-  if (_d) {
-    float deriv = (err - _last_err) - (sp - _last_sp);
-    _last_sp = sp; 
-    _last_err = err; 
+    if (_i)
+    {
+        _sum += err * _i; 
+        I = _sum;
+    }
 
-    D = _d * deriv;
-  }
+    if (_d)
+    {
+        float deriv = (err - _last_err) - (sp - _last_sp);
+        _last_sp = sp;
+        _last_err = err;
 
-  float out = P + I + D; 
+        D = _d * deriv;
+    }
 
-  return out;
+    float out = P + I + D;
+
+#ifdef DEBUG_PID
+    Serial.print("  P: ");
+    Serial.print(P);
+    Serial.print("  I: ");
+    Serial.print(I);
+    Serial.print("  D: ");
+    Serial.print(D);
+    Serial.print("  Sum: ");
+    Serial.println(out);
+#endif
+
+    return out;
 }

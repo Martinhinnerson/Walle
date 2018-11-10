@@ -8,6 +8,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
 #include "PID.h"
+#include "debug.h"
 
 class Platform
 {

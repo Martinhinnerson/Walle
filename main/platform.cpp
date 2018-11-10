@@ -13,7 +13,7 @@ Platform::Platform()
     _x = 0;
     _y = 0;
 
-    rotationPID = PID(5, 0, 0); //Kp Ki Kd Hz output_bits output_signed
+    rotationPID = PID(0.1, 0, 0); //Kp Ki Kd Hz output_bits output_signed
     
     rightMotor = Motor::Motor(3, 2, 4, A1, 1);
     leftMotor = Motor::Motor(6, 7, 5, A0, 0);

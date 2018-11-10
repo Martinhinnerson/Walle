@@ -2,6 +2,7 @@
 #define MOTOR_H
 
 #include <Arduino.h>
+#include "debug.h"
 
 /* Motor class
  * Used to once for each motor in the platform

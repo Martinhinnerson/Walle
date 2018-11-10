@@ -13,11 +13,9 @@
 #include "communication.h"
 #include "platform.h"
 #include "radio.h"
+#include "debug.h"
 //*************SETTINGS*****************************
-//#define DEBUG_MOTORS 1
-//#define DEBUG_SERVOS 1
-//#define DEBUG_RADIO 1
-//#define DEBUG_COMPASS 1
+
 //***********Controller Reciever******************
 
 //***********Communication******************
@@ -38,11 +36,12 @@ void setup()
 /* Main loop */
 void loop()
 {
-  walle.readFromRadio();
-  walle.mapToMotors();
-  walle.runMotors();
+  //walle.readFromRadio();
+  //walle.mapToMotors();
+  //walle.runMotors();
   walle.setHeading();
 
-  //Serial.println(walle.getHeading());
-  
+  float sum = walle.rotationPID.calculate(50, walle.getHeading());
+
+  delay(50);
 }

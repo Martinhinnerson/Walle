@@ -2,7 +2,9 @@
 #define PID_H
 
 #include <Arduino.h>
+#include "debug.h"
 
+#define MOD(a) ((a > 360.0) ? (a - 360.0) : ((a < 0.0) ? (a + 360.0) : a))
 
 class PID
 {
