@@ -3,6 +3,7 @@
         {
             "name": "Mac",
             "includePath": [
+                "/Users/martinhinnerson/Documents/Arduino/libraries/TFMini/src",
                 "/Users/martinhinnerson/Documents/Arduino/libraries/FastPID/src",
                 "/Users/martinhinnerson/Documents/Arduino/libraries/Adafruit_HMC5883_Unified",
                 "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/tools/**",

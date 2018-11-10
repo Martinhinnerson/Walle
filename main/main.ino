@@ -1,3 +1,5 @@
+#include <TFMini.h>
+
 /* This is the main file for the robot module. */
 //**********LIBRARIES************************************
 #include "Arduino.h"
