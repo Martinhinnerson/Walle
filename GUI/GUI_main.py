@@ -1,9 +1,10 @@
 # Full imports
-import kivy
+# import kivy
 import serial
 import os
 import struct
 import kivy.properties as properties
+import importlib
 # Specific imports
 from kivy.app import App
 from kivy.uix.widget import Widget
@@ -14,6 +15,8 @@ from random import randint
 from kivy.uix.button import Button
 from os import listdir 
 from kivy.lang import Builder
+from kivy.uix.checkbox import CheckBox
+
 
 #This is for PySerial
 import serial
@@ -26,6 +29,9 @@ from kivy.uix.video import Video
 kv_path = './kv/'
 for kv in listdir(kv_path):
     Builder.load_file(kv_path+kv)
+
+importlib.import_module("StatusBar")
+importlib.import_module("MapWidget")
 
 
 class GUIWidget(GridLayout):
@@ -82,10 +88,17 @@ class GUIWidget(GridLayout):
     def readSerial(self, dt):
         direction = 0#self.ser.readline().decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
         return direction
-        
-        
-        
 
+    def check_box_pressed(self, id, status):
+        if id == "Draw on map":
+            if status:
+                self.map.draw_from_data_file()
+            else:
+                self.map.clear_canvas()
+        
+        
+        
+        
 class AddButton(Button):
     increment_value = properties.NumericProperty(0)
     # value = properties.ReferenceListProperty(increment_value)
@@ -94,54 +107,6 @@ class AddButton(Button):
 class SubtractButton(Button):
     decrement_value = properties.NumericProperty(0)
     # value = properties.ReferenceListProperty(decrement_value)
-
-
-class MapWidget(Widget):
-    draw_color = properties.ListProperty()
-    background = properties.ListProperty([1, 0, 1])
-
-    def on_touch_down(self, touch):
-        if self.inside_widget(touch):
-            with self.canvas:
-                Color(self.draw_color)
-                print(self.draw_color, self.background)
-                d = 30.
-                Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
-                touch.ud['line'] = Line(points=(touch.x, touch.y))
-
-    def on_touch_move(self, touch):
-        if self.inside_widget(touch):  
-            Color(self.draw_color) 
-            touch.ud['line'].points += [touch.x, touch.y]
-
-
-    def on_touch_up(self, touch):      
-        if self.inside_widget(touch):
-            with self.canvas:
-                Color(self.draw_color)
-                self.inside_widget(touch)
-                d = 30.
-                Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
-    
-    def inside_widget(self, touch):
-        bottom_left_x = self.center_x - self.width/2
-        bottom_left_y = self.center_y - self.height/2
-        top_right_x = self.center_x + self.width/2
-        top_right_y = self.center_y + self.height/2
-        x = touch.pos[0]
-        y = touch.pos[1]
-        
-        return x >= bottom_left_x and x <= top_right_x and y >= bottom_left_y and y <= top_right_y
-
-
-class StatusBar(GridLayout):
-    connection = properties.StringProperty("")
-    mission = properties.StringProperty("None")
-    speed = properties.NumericProperty(0)
-    direction = properties.NumericProperty(0)   
-
-    def get_dir(self):
-        return self.direction
 
 
 class MissionBar(GridLayout):

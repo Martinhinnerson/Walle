@@ -19,10 +19,22 @@
             id: status_bar
         MissionBar:
             id: mission_bar
+        Button: 
+            text: "Clear"
+            on_release: root.map.clear_canvas()
+        BoxLayout:
+            orientation: "horizontal"
+            Label: 
+                id: draw_on_map_label
+                text: "Draw on map"
+            CheckBox:
+                id: draw_on_map_checkbox
+                on_press: root.check_box_pressed(draw_on_map_label.text, draw_on_map_checkbox.active)
     BoxLayout:
         orientation: "vertical"
         MapWidget:
             id: map_widget
+    
     Label:
         id: display
         font_size: dp(50)
