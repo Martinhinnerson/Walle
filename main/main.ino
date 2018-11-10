@@ -37,11 +37,14 @@ void setup()
 void loop()
 {
   //walle.readFromRadio();
-  //walle.mapToMotors();
-  //walle.runMotors();
-  walle.setHeading();
 
-  float sum = walle.rotationPID.calculate(50, walle.getHeading());
+  walle.setHeading();
+  walle.rotateTo(50);
+  walle.mapToMotors();
+  walle.runMotors();
+
+  //float tmp = walle.getHeading();
+  //float sum = walle.rotationPID.calculate(50, tmp);
 
   delay(50);
 }

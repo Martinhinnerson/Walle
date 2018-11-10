@@ -13,7 +13,7 @@ Platform::Platform()
     _x = 0;
     _y = 0;
 
-    rotationPID = PID(0.1, 0, 0); //Kp Ki Kd Hz output_bits output_signed
+    rotationPID = PID(0.05, 0, 0.01); //Kp Ki Kd
     
     rightMotor = Motor::Motor(3, 2, 4, A1, 1);
     leftMotor = Motor::Motor(6, 7, 5, A0, 0);
@@ -181,7 +181,10 @@ void Platform::displaySensorDetails()
 }
 
 void Platform::rotateTo(int setPoint){
-    int feedback = _heading;
-    uint8_t output = rotationPID.calculate(setPoint, feedback);
-    _direction += output;
+    float output = rotationPID.calculate(setPoint, _heading);
+    
+    if(output > 1) output = 1;
+    if(output < -1) output = -1;
+    _x = output;
+    Serial.println(output);
 }

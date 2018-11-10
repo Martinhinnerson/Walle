@@ -3,7 +3,7 @@
         {
             "name": "Mac",
             "includePath": [
-                "/Users/martinhinnerson/Documents/Arduino/libraries/TFMini/src",
+               /* "/Users/martinhinnerson/Documents/Arduino/libraries/TFMini/src",
                 "/Users/martinhinnerson/Documents/Arduino/libraries/FastPID/src",
                 "/Users/martinhinnerson/Documents/Arduino/libraries/Adafruit_HMC5883_Unified",
                 "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/tools/**",
@@ -12,10 +12,10 @@
                 "/Users/martinhinnerson/Documents/Arduino/libraries/Adafruit_SoftServo",
                 "/Applications/Arduino.app/Contents/Java/libraries/Servo/src",
                 "/Users/martinhinnerson/Library/Arduino15/packages/arduino/tools/**",
-                "/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/**"
+                "/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/**" */
             ],
             "forcedInclude": [
-                "/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino/Arduino.h"
+                //"/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino/Arduino.h"
             ],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
