@@ -58,7 +58,7 @@ float PID::calculate(float sp, float fb)
 
     if (_Kp)
     {
-        P = _Kp * (err - _err_k_1);
+        P = _Kp * err;//(err - _err_k_1);
     }
 
     if (_Ki)
@@ -84,7 +84,14 @@ float PID::calculate(float sp, float fb)
     Serial.print("  D: ");
     Serial.print(D);
     Serial.print("  Sum: ");
-    Serial.println(out);
+    Serial.print(out);
+    Serial.print("  err: ");
+    Serial.print(err);
+    Serial.print("  err_k_1: ");
+    Serial.print(_err_k_1);
+    Serial.print("  err_k_2: ");
+    Serial.println(_err_k_2);
+    
 #endif
 
     return out;
