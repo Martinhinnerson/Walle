@@ -27,19 +27,14 @@ bool PID::setCoefficients(float kp, float ki, float kd)
     return !_cfg_err;
 }
 
-bool PID::configure(float kp, float ki, float kd)
-{
-    clear();
-    setCoefficients(kp, ki, kd);
-    return !_cfg_err;
-}
-
 void PID::setCfgErr()
 {
     _cfg_err = true;
     _p = _i = _d = 0;
 }
 
+//Error that can be set if something is wrong
+//This is for set if something is wrong in the setup
 bool PID::err()
 {
     return _cfg_err;
