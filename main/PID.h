@@ -9,11 +9,12 @@
 class PID
 {
   private:
-    float _p, _i, _d;
+    float _Kp, _Ki, _Kd, T_s;
     bool _cfg_err; //Error that can be set if something is wrong
 
-    float _sum;
-    float _last_sp, _last_out, _last_err;
+    float _control_k_1; // Controlsignal for k-1
+    float _err_k_1; // Error for k-1
+    float _err_k_2; // Error for k-2
 
 
   private:
