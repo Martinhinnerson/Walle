@@ -1,7 +1,7 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-#include "debug.h"
+#include "settings.h"
 
 class Sensor{
 

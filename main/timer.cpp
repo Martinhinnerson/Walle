@@ -51,17 +51,22 @@ void Timer::run()
  * This function is used to set a timer
  * 
  * Inputs: delay d, callback_function f, timer id
- * Outputs: boolean true if succeded, false otherwise
+ * Outputs: none
  * 
  */ 
-boolean Timer::setTimer(unsigned long d, callback_function f, int id)
+void Timer::setTimer(unsigned long d, callback_function f, int id)
 {
 
-    if (id > MAX_TIMERS)
+    if (id >= MAX_TIMERS-1)
     {
         Serial.println("Error creating timer. Index bigger than max index.");
-        return false;
+        while(1);
     }
+
+    Serial.print("Created timer ");
+    Serial.print(id);
+    Serial.print(" with delay ");
+    Serial.println(d);
 
     _delays[id] = d;
     _enabled[id] = true;

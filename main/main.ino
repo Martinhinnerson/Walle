@@ -13,7 +13,8 @@
 #include "communication.h"
 #include "platform.h"
 #include "radio.h"
-#include "debug.h"
+#include "settings.h"
+#include "timer.h"
 //*************SETTINGS*****************************
 
 //***********Controller Reciever******************
@@ -21,8 +22,8 @@
 //***********Communication******************
 
 //***********Platform******************
+
 Platform walle; // instansiate the platform with the default constructor
-//Adafruit_HMC5883_Unified compass = Adafruit_HMC5883_Unified(12345);
 
 void setup()
 {
@@ -37,12 +38,9 @@ void loop()
 {
   //walle.readFromRadio();
 
-  walle.rotateTo(50);
-  walle.mapToMotors();
-  walle.runMotors();
+  //walle.rotateTo(50);
+  //walle.mapToMotors();
+  //walle.runMotors();
 
-  //float tmp = walle.getHeading();
-  //float sum = walle.rotationPID.calculate(50, tmp);
-
-  delay(50);
+  //walle.timer.run();
 }

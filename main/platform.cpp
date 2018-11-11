@@ -1,8 +1,5 @@
 #include <Arduino.h>
 #include "platform.h"
-#include "motor.h"
-#include "math.h"
-#include <FastPID.h>
 
 //Constructor
 Platform::Platform()
@@ -19,6 +16,7 @@ Platform::Platform()
     leftMotor = Motor::Motor(6, 7, 5, A0, 0);
     radioInput = Radio::Radio();
     compass = Adafruit_HMC5883_Unified(12345);
+
 }
 
 void Platform::begin()
@@ -28,14 +26,12 @@ void Platform::begin()
     {
         /* There was a problem detecting the HMC5883 ... check your connections */
         Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
-        while (1)
-            ;
+        while (1);
     }
     if (rotationPID.err())
     {
         Serial.println("There was a configuration error with the rotationPID");
-        while (1)
-            ;
+        while (1);
     }
 }
 

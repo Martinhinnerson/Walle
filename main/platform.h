@@ -8,7 +8,8 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
 #include "PID.h"
-#include "debug.h"
+#include "settings.h"
+#include "timer.h"
 
 
 //Cutoff everything outside of -1 < a < 1
@@ -35,6 +36,8 @@ class Platform
     Radio radioInput;
 
     Adafruit_HMC5883_Unified compass; // = Adafruit_HMC5883_Unified(12345);
+
+    Timer timer; // instansiate the timer
 
   public:
     Platform(); //constructor

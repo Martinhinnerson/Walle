@@ -1,9 +1,6 @@
 TODOs:
   Add various todos here
-  ☐ Add serial communication support to talk to the WIFI module
-    the wifi module will talk to the computer and both recieve and send data
-  ☐ Create a communication protocol/class for sending sensor data
-    It would be nice to have one unit controlling gathering and sending of the sendor data
+
   ☐ Emigrate the code to the Arduino Mega
     ☐ The cppm library might have to be customized to support the mega
   ☐ Add accelerometer/gyro to the platform
@@ -24,8 +21,23 @@ TODOs:
   ☐ Make it so that the radio reciever is diabled if the controller is not turned on
     Right now if the controller is not on when the platform is on weird things can happen
     The platform should be able to sense when there is not radio signals being recieved
-  Bug testing:
-    ☐ Test the timer class for bugs
+  Communication:
+  ☐ Add serial communication support to talk to the WIFI module
+    the wifi module will talk to the computer and both recieve and send data
+  ☐ Create a communication protocol/class for sending sensor data
+    It would be nice to have one unit controlling gathering and sending of the sendor data
+
+  Timer:
+    ☐ Fix the problem with not being able to use non-static member functions in callbacks
+      There is currently a big problem with this class.
+      Right now the callback function has to be static which means that 
+      if it is not global (which it should not be) the callback function cannot use any
+      private member variable or functions (which most of them do...).alignas
+
+      One solution to this is to implement boost:: which allows non-static member functions
+      in a callback. https://github.com/vancegroup/arduino-boost
+
+      Could the timers be handled without callback functions?
 
   PID:
     ☐ Add support for wraparound

@@ -2,7 +2,7 @@
 #define RADIO_H
 
 #include <Arduino.h>
-#include "debug.h"
+#include "settings.h"
 
 class Radio
 {

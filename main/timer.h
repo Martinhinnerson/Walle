@@ -3,6 +3,14 @@
  * 
  * A timer class used to handle function calls with set delays
  * 
+ * There is currently a big problem with this class.
+ * Right now the callback function has to be static which means that 
+ * if it is not global (which it should not be) the callback function cannot use any
+ * private member variable or functions (which most of them do...).alignas
+ * 
+ * One solution to this is to implement boost:: which allows non-static member functions
+ * in a callback.
+ *  
  */
 
 #ifndef TIMER_H
@@ -37,7 +45,7 @@ class Timer
     //function to call in the main loop
     void run();
     //set a timer "id" to run ever d milliseconds and call function f after every delay
-    boolean setTimer(unsigned long d, callback_function f, int id);
+    void setTimer(unsigned long d, callback_function f, int id);
     //check if timer "id" is enabled
     boolean isEnabled(int id);
     //enable timer "id"
