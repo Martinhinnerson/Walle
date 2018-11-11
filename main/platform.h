@@ -11,6 +11,9 @@
 #include "debug.h"
 
 
+//Cutoff everything outside of -1 < a < 1
+#define CUTOFF1(a) max(-1, min(a, 1))
+
 class Platform
 {
     double _speed;
@@ -41,7 +44,6 @@ class Platform
     double getSpeed();
     void setDirection(int direction);
     int getDirection();
-    void setHeading();
     int getHeading();
 
     void runMotors();     // Run the motors with their set speed

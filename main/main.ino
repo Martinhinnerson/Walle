@@ -30,7 +30,6 @@ void setup()
   CPPM.begin();
 
   walle.begin();
-  
 }
 
 /* Main loop */
@@ -38,7 +37,6 @@ void loop()
 {
   //walle.readFromRadio();
 
-  walle.setHeading();
   walle.rotateTo(50);
   walle.mapToMotors();
   walle.runMotors();

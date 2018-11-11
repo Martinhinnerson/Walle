@@ -1,27 +1,20 @@
 TODOs:
   Add various todos here
-  Communication:
   ☐ Add serial communication support to talk to the WIFI module
     the wifi module will talk to the computer and both recieve and send data
   ☐ Create a communication protocol/class for sending sensor data
     It would be nice to have one unit controlling gathering and sending of the sendor data
-  
-  Platform:
   ☐ Emigrate the code to the Arduino Mega
     ☐ The cppm library might have to be customized to support the mega
   ☐ Add accelerometer/gyro to the platform
     These two might not be that neccesary so the priority is not that high
   ☐ Implement proximity sensors
-    ☐ Test the mini LIDAR
     ☐ Test the sharp IR sensor
     ☐ Create linear interpolation and calibrate the sensor data
       The sensors won't give linearly increasing values with distance
   ☐ Add different modes for the platform
     For examle manual, automatic driving, lidar sensor mode etc.
     This will basically be a state machine in the platform class.
-  ☐ Implement a timer class that can keep track of timers
-    This can be usefull if we want to do certain tasks only once in a while
-    like for example reading a sensor or sending the sensor value to the GUI
   ☐ Implement the stepper motor for the lidar system
     It will be controlled with an H-bridge and probably the accelStepper library
   ☐ Implement the sound card to bea able to play sounds
@@ -31,6 +24,8 @@ TODOs:
   ☐ Make it so that the radio reciever is diabled if the controller is not turned on
     Right now if the controller is not on when the platform is on weird things can happen
     The platform should be able to sense when there is not radio signals being recieved
+  Bug testing:
+    ☐ Test the timer class for bugs
 
   PID:
     ☐ Add support for wraparound
@@ -44,6 +39,10 @@ TODOs:
     This is a stupid task and it should be done when the code is written...
 
 Archive:
+  ✔ Test the mini LIDAR @done(18-11-11 19:56) @project(TODOs)
+  ✔ Implement a timer class that can keep track of timers @started(18-11-11 20:38) @done(18-11-11 20:38) @lasted(31s) @project(TODOs)
+    This can be usefull if we want to do certain tasks only once in a while
+    like for example reading a sensor or sending the sensor value to the GUI
   ✔ Create PID class so that we can create and use PID controllers for the platform @started(18-11-10 12:44) @done(18-11-10 13:18) @lasted(34m31s) @project(TODOs)
     The first one i want is one that rotates the robot to a certain heading and uses the compass as the feedback
   ✔ Test the new class implementation of the platform and the radio @done(18-11-10 11:25) @project(TODOs)

@@ -25,13 +25,12 @@ class Motor
   double _speed = 0; //(-1 < speed < 1)
 
 public:
-
-  Motor();//Default constructor
+  Motor();                                                              //Default constructor
   Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id); //Constructor
-  void setSpeed(double speed);//set the speed of the motor, (-1 < speed < 1)
-  int getSpeed();//returns the current speed of the motor
-    void runMotor();//Run the motor with dir and speed
-  int readRpm();//read the rpm of the motor using hall sensor, NOT CURRENTLY ON THE ROBOT
+  void setSpeed(double speed);                                          //set the speed of the motor, (-1 < speed < 1)
+  int getSpeed();                                                       //returns the current speed of the motor
+  void runMotor();                                                      //Run the motor with dir and speed
+  int readRpm();                                                        //read the rpm of the motor using hall sensor, NOT CURRENTLY ON THE ROBOT
 };
 
 #endif

@@ -14,7 +14,7 @@ Platform::Platform()
     _y = 0;
 
     rotationPID = PID(0.05, 0, 0.01); //Kp Ki Kd
-    
+
     rightMotor = Motor::Motor(3, 2, 4, A1, 1);
     leftMotor = Motor::Motor(6, 7, 5, A0, 0);
     radioInput = Radio::Radio();
@@ -28,11 +28,14 @@ void Platform::begin()
     {
         /* There was a problem detecting the HMC5883 ... check your connections */
         Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
-        while (1);
+        while (1)
+            ;
     }
-    if(rotationPID.err()){
+    if (rotationPID.err())
+    {
         Serial.println("There was a configuration error with the rotationPID");
-        while(1);
+        while (1)
+            ;
     }
 }
 
@@ -111,7 +114,7 @@ void Platform::mapToMotors()
 #endif
 }
 
-void Platform::setHeading()
+int Platform::getHeading()
 {
     /* Get a new sensor event */
     sensors_event_t event;
@@ -139,20 +142,24 @@ void Platform::setHeading()
     // Convert radians to degrees for readability.
     int headingDegrees = heading * 180 / M_PI;
 
-    #ifdef DEBUG_COMPASS
+#ifdef DEBUG_COMPASS
     /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-    Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
-    Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
-    Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
+    Serial.print("X: ");
+    Serial.print(event.magnetic.x);
+    Serial.print("  ");
+    Serial.print("Y: ");
+    Serial.print(event.magnetic.y);
+    Serial.print("  ");
+    Serial.print("Z: ");
+    Serial.print(event.magnetic.z);
+    Serial.print("  ");
+    Serial.println("uT");
     Serial.print("Heading (degrees): ");
     Serial.println(headingDegrees);
-    #endif
+#endif
 
     _heading = headingDegrees;
-}
-
-int Platform::getHeading(){
-    return _heading;
+    return headingDegrees;
 }
 
 void Platform::displaySensorDetails()
@@ -180,11 +187,12 @@ void Platform::displaySensorDetails()
     delay(500);
 }
 
-void Platform::rotateTo(int setPoint){
-    float output = rotationPID.calculate(setPoint, _heading);
-    
-    if(output > 1) output = 1;
-    if(output < -1) output = -1;
+void Platform::rotateTo(int setPoint)
+{
+    float output = rotationPID.calculate(setPoint, getHeading());
+
+    CUTOFF1(output);
     _x = output;
+
     Serial.println(output);
 }
