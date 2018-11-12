@@ -37,11 +37,15 @@ class Platform
 
     Adafruit_HMC5883_Unified compass; // = Adafruit_HMC5883_Unified(12345);
 
-    Timer timer; // instansiate the timer
+    Timer motorTimer; // timer for the motor updates
+    Timer PIDTimer; // timer for PID loop
+    Timer radioTimer; // timer for the radio
 
   public:
     Platform(); //constructor
     void begin();
+
+    void run(); //main loop of the platform, should be run in loop()
 
     void setSpeed(double speed);
     double getSpeed();

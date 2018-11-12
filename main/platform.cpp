@@ -17,6 +17,9 @@ Platform::Platform()
     radioInput = Radio::Radio();
     compass = Adafruit_HMC5883_Unified(12345);
 
+    motorTimer.setTimer(MOTOR_DELAY);
+    PIDTimer.setTimer(PID_DELAY);
+    radioTimer.setTimer(RADIO_DELAY);
 }
 
 void Platform::begin()
@@ -33,6 +36,20 @@ void Platform::begin()
         Serial.println("There was a configuration error with the rotationPID");
         while (1);
     }
+}
+
+void Platform::run(){
+    if(motorTimer.check()){
+        mapToMotors();
+        runMotors();
+    }
+    if(PIDTimer.check()){
+        //run PID loop
+    }
+    if(radioTimer.check()){
+        readFromRadio();
+    }
+
 }
 
 void Platform::setSpeed(double speed)

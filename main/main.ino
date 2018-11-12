@@ -36,11 +36,5 @@ void setup()
 /* Main loop */
 void loop()
 {
-  //walle.readFromRadio();
-
-  //walle.rotateTo(50);
-  //walle.mapToMotors();
-  //walle.runMotors();
-
-  //walle.timer.run();
+  walle.run();
 }

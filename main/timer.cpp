@@ -2,14 +2,8 @@
 
 Timer::Timer()
 {
-    unsigned long current_millis = millis();
-    for (int i = 0; i < MAX_TIMERS; i++)
-    {
-        _enabled[i] = false;
-        _callbacks[i] = 0;
-        _prev_millis[i] = current_millis;
-    }
-    _numTimers = 0;
+    _enabled = false;
+    _prev_millis = millis();
 }
 
 
@@ -18,31 +12,24 @@ Timer::Timer()
  * 
  * This function should be called in the main loop
  * 
- * The function checks each timer
- * If a timers delay has passed, this function updated the _prev_millis and
- * calls the callback_function
- * 
  * Inputs: none
- * Outputs: none
+ * Outputs: true if the timer has passed, false otherwise
  * 
  */
-void Timer::run()
+boolean Timer::check()
 {
     //get current time
     unsigned long current_millis = millis();
 
-    //loop through the timers
-    for (int i = 0; i < MAX_TIMERS; i++)
+    if (_enabled)
     {
-        if (_enabled[i])
+        if (current_millis - _prev_millis >= _delay)
         {
-            if (current_millis - _prev_millis[i] >= _delays[i])
-            {
-                _prev_millis[i] += _delays[i];
-                _callbacks[i]();
-            }
+            _prev_millis += _delay;
+            return true;
         }
     }
+    return false;
 }
 
 /*
@@ -50,47 +37,34 @@ void Timer::run()
  * 
  * This function is used to set a timer
  * 
- * Inputs: delay d, callback_function f, timer id
+ * Inputs: delay d
  * Outputs: none
  * 
  */ 
-void Timer::setTimer(unsigned long d, callback_function f, int id)
+void Timer::setTimer(unsigned long d)
 {
 
-    if (id >= MAX_TIMERS-1)
-    {
-        Serial.println("Error creating timer. Index bigger than max index.");
-        while(1);
-    }
-
-    Serial.print("Created timer ");
-    Serial.print(id);
-    Serial.print(" with delay ");
+    Serial.print("Created timer with delay: ");
     Serial.println(d);
 
-    _delays[id] = d;
-    _enabled[id] = true;
-    _prev_millis[id] = millis();
-    _callbacks[id] = f;
-
-    _numTimers++;
-
-    return true;
+    _delay = d;
+    _enabled = true;
+    _prev_millis = millis();
 }
 
-boolean Timer::isEnabled(int id)
+boolean Timer::isEnabled()
 {
-    return _enabled[id];
+    return _enabled;
 }
-void Timer::enable(int id)
+void Timer::enable()
 {
-    _enabled[id] = true;
+    _enabled = true;
 }
-void Timer::disable(int id)
+void Timer::disable()
 {
-    _enabled[id] = false;
+    _enabled = false;
 }
-void Timer::toggle(int id)
+void Timer::toggle()
 {
-    _enabled[id] = !_enabled[id];
+    _enabled = !_enabled;
 }
