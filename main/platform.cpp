@@ -9,6 +9,7 @@ Platform::Platform()
     _heading = 0;
     _x = 0;
     _y = 0;
+    _mode = IDLE;
 
     rotationPID = PID(0.05, 0, 0.01); //Kp Ki Kd
 
@@ -36,18 +37,65 @@ void Platform::begin()
         Serial.println("There was a configuration error with the rotationPID");
         while (1);
     }
+    
+    CPPM.begin();
+    
+    Serial.begin(SERIAL_BAUDRATE);
 }
 
+/*
+ * run()
+ * 
+ * This function is the main function of the platform and it should be run in loop()
+ * Every loop it checks if a timer has passed and if it has it runs its corresponding functions
+ * We can also add things without timers that should run all the time. (16Mhz)
+ * 
+ * Here we also have the state machine controlling the different modes of the platform
+ * 
+ * Inputs: none
+ * Outputs: none
+ */
 void Platform::run(){
-    if(motorTimer.check()){
-        mapToMotors();
-        runMotors();
-    }
-    if(PIDTimer.check()){
-        //run PID loop
-    }
-    if(radioTimer.check()){
-        readFromRadio();
+
+    switch(_mode){
+        case IDLE:
+
+        break;
+        case MANUAL:
+            if(motorTimer.check()){
+                //mapToMotors();
+                //runMotors();
+            }
+        break;
+        case AUTOMATIC:
+
+            if(motorTimer.check()){
+                //mapToMotors();
+                //runMotors();
+            }
+            if(PIDTimer.check()){
+                //run PID loop
+            }
+
+        break;
+        case MISSION:
+
+        break;
+        case RADIO:
+            
+            if(radioTimer.check()){
+                //readFromRadio();
+            }
+            if(motorTimer.check()){
+                //mapToMotors();
+                //runMotors();
+            }
+
+        break;
+        default:
+            Serial.println("Error, this state does not exist. Going back to idle.");
+            _mode = IDLE;
+        break;
     }
 
 }
@@ -67,6 +115,14 @@ void Platform::setDirection(int direction)
 int Platform::getDirection()
 {
     return _direction;
+}
+
+void Platform::setMode(int mode){
+    _mode = mode;
+}
+
+int Platform::getMode(){
+    return _mode;
 }
 
 //Run the motors with their set speed

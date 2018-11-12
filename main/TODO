@@ -9,9 +9,6 @@ TODOs:
     ☐ Test the sharp IR sensor
     ☐ Create linear interpolation and calibrate the sensor data
       The sensors won't give linearly increasing values with distance
-  ☐ Add different modes for the platform
-    For examle manual, automatic driving, lidar sensor mode etc.
-    This will basically be a state machine in the platform class.
   ☐ Implement the stepper motor for the lidar system
     It will be controlled with an H-bridge and probably the accelStepper library
   ☐ Implement the sound card to bea able to play sounds
@@ -38,6 +35,9 @@ TODOs:
     This is a stupid task and it should be done when the code is written...
 
 Archive:
+  ✔ Add different modes for the platform @done(18-11-12 09:53) @project(TODOs)
+    For examle manual, automatic driving, lidar sensor mode etc.
+    This will basically be a state machine in the platform class.
   ✔ Fix the problem with not being able to use non-static member functions in callbacks @started(18-11-12 09:03) @done(18-11-12 09:04) @lasted(1m1s) @project(TODOs.Timer)
     There is currently a big problem with this class.
     Right now the callback function has to be static which means that 

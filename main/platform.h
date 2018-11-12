@@ -10,10 +10,18 @@
 #include "PID.h"
 #include "settings.h"
 #include "timer.h"
+#include <jm_CPPM.h>
+#include <TFMini.h>
 
 
 //Cutoff everything outside of -1 < a < 1
 #define CUTOFF1(a) max(-1, min(a, 1))
+
+#define IDLE 0
+#define MANUAL 1
+#define AUTOMATIC 2
+#define MISSION 3
+#define RADIO 4
 
 class Platform
 {
@@ -24,6 +32,9 @@ class Platform
     //_x and _y are the input coordinated from the controller
     double _x;
     double _y;
+
+    //The mode the platform is currently in
+    int _mode;
 
   public:
     PID rotationPID;
@@ -52,6 +63,8 @@ class Platform
     void setDirection(int direction);
     int getDirection();
     int getHeading();
+    void setMode(int mode);
+    int getMode();
 
     void runMotors();     // Run the motors with their set speed
     void mapToMotors();   // Map _x and _y to the motors
