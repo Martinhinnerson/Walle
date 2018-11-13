@@ -17,7 +17,7 @@ void PID::clear()
     _Kp = 0;
     _Ki = 0;
     _Kd = 0;
-    _err_k_1 = 0; 
+    _err_k_1 = 0;
     _err_k_2 = 0;
     _cfg_err = false;
 }
@@ -58,7 +58,7 @@ float PID::calculate(float sp, float fb)
 
     if (_Kp)
     {
-        P = _Kp * err;//(err - _err_k_1);
+        P = _Kp * err; //(err - _err_k_1);
     }
 
     if (_Ki)
@@ -73,7 +73,7 @@ float PID::calculate(float sp, float fb)
 
     _err_k_1 = err;
     _err_k_2 = _err_k_1;
-    
+
     float out = P + I + D;
 
 #ifdef DEBUG_PID
@@ -91,7 +91,7 @@ float PID::calculate(float sp, float fb)
     Serial.print(_err_k_1);
     Serial.print("  err_k_2: ");
     Serial.println(_err_k_2);
-    
+
 #endif
 
     return out;

@@ -34,12 +34,14 @@ Motor::Motor(int pwm_pin, int dir_pin1, int dir_pin2, int hall_pin, int id)
 
 //Setter for the speed of the motor
 //The speed will be clamped to -1 and 1
-void Motor::setSpeed(double speed){
+void Motor::setSpeed(double speed)
+{
   _speed = max(-1, min(speed, 1));
 }
 
 //getter for _speed
-int Motor::getSpeed(){
+int Motor::getSpeed()
+{
   return _speed;
 }
 
@@ -47,17 +49,20 @@ int Motor::getSpeed(){
 //The direction is also set depending on the _speed variable
 void Motor::runMotor()
 {
-  if(_speed>=0){
+  if (_speed >= 0)
+  {
     digitalWrite(DIR_PIN1, HIGH);
     digitalWrite(DIR_PIN2, LOW);
-  } 
-  else {
+  }
+  else
+  {
     digitalWrite(DIR_PIN1, LOW);
     digitalWrite(DIR_PIN2, HIGH);
   }
   int pulseWidth = 0;
-  if (abs(_speed) >0.05) {
-    pulseWidth = map(abs(_speed)*100, 0, 100, 50, 255);
+  if (abs(_speed) > 0.05)
+  {
+    pulseWidth = map(abs(_speed) * 100, 0, 100, 50, 255);
   }
   analogWrite(PWM_PIN, pulseWidth);
 }
@@ -68,8 +73,9 @@ int Motor::readRpm()
 {
   int rpm;
   int sig = analogRead(HALL_PIN); //read raw value of hall sensor
-  HallVal = (sig > _regsig); //convert it to digital 0,1 form
-  if (prev_HallVal == 0 && HallVal == 1) { //check for rising edge
+  HallVal = (sig > _regsig);      //convert it to digital 0,1 form
+  if (prev_HallVal == 0 && HallVal == 1)
+  { //check for rising edge
     curr_Time = micros();
     rpm = 1000000 * 60 / (curr_Time - Time);
     Serial.println("Motor: " + _id);

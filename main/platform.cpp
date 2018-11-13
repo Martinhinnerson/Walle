@@ -1,8 +1,5 @@
 #include <Arduino.h>
 #include "platform.h"
-#include "motor.h"
-#include "math.h"
-#include <FastPID.h>
 
 //Constructor
 Platform::Platform()
@@ -12,13 +9,18 @@ Platform::Platform()
     _heading = 0;
     _x = 0;
     _y = 0;
+    _mode = IDLE;
 
     rotationPID = PID(0.05, 0, 0.01); //Kp Ki Kd
-    
+
     rightMotor = Motor::Motor(3, 2, 4, A1, 1);
     leftMotor = Motor::Motor(6, 7, 5, A0, 0);
     radioInput = Radio::Radio();
     compass = Adafruit_HMC5883_Unified(12345);
+
+    motorTimer.setTimer(MOTOR_DELAY);
+    PIDTimer.setTimer(PID_DELAY);
+    radioTimer.setTimer(RADIO_DELAY);
 }
 
 void Platform::begin()
@@ -30,10 +32,72 @@ void Platform::begin()
         Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
         while (1);
     }
-    if(rotationPID.err()){
+    if (rotationPID.err())
+    {
         Serial.println("There was a configuration error with the rotationPID");
-        while(1);
+        while (1);
     }
+    
+    CPPM.begin();
+    
+    Serial.begin(SERIAL_BAUDRATE);
+}
+
+/*
+ * run()
+ * 
+ * This function is the main function of the platform and it should be run in loop()
+ * Every loop it checks if a timer has passed and if it has it runs its corresponding functions
+ * We can also add things without timers that should run all the time. (16Mhz)
+ * 
+ * Here we also have the state machine controlling the different modes of the platform
+ * 
+ * Inputs: none
+ * Outputs: none
+ */
+void Platform::run(){
+
+    switch(_mode){
+        case IDLE:
+
+        break;
+        case MANUAL:
+            if(motorTimer.check()){
+                //mapToMotors();
+                //runMotors();
+            }
+        break;
+        case AUTOMATIC:
+
+            if(motorTimer.check()){
+                //mapToMotors();
+                //runMotors();
+            }
+            if(PIDTimer.check()){
+                //run PID loop
+            }
+
+        break;
+        case MISSION:
+
+        break;
+        case RADIO:
+            
+            if(radioTimer.check()){
+                //readFromRadio();
+            }
+            if(motorTimer.check()){
+                //mapToMotors();
+                //runMotors();
+            }
+
+        break;
+        default:
+            Serial.println("Error, this state does not exist. Going back to idle.");
+            _mode = IDLE;
+        break;
+    }
+
 }
 
 void Platform::setSpeed(double speed)
@@ -51,6 +115,14 @@ void Platform::setDirection(int direction)
 int Platform::getDirection()
 {
     return _direction;
+}
+
+void Platform::setMode(int mode){
+    _mode = mode;
+}
+
+int Platform::getMode(){
+    return _mode;
 }
 
 //Run the motors with their set speed
@@ -111,7 +183,7 @@ void Platform::mapToMotors()
 #endif
 }
 
-void Platform::setHeading()
+int Platform::getHeading()
 {
     /* Get a new sensor event */
     sensors_event_t event;
@@ -139,20 +211,24 @@ void Platform::setHeading()
     // Convert radians to degrees for readability.
     int headingDegrees = heading * 180 / M_PI;
 
-    #ifdef DEBUG_COMPASS
+#ifdef DEBUG_COMPASS
     /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-    Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
-    Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
-    Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
+    Serial.print("X: ");
+    Serial.print(event.magnetic.x);
+    Serial.print("  ");
+    Serial.print("Y: ");
+    Serial.print(event.magnetic.y);
+    Serial.print("  ");
+    Serial.print("Z: ");
+    Serial.print(event.magnetic.z);
+    Serial.print("  ");
+    Serial.println("uT");
     Serial.print("Heading (degrees): ");
     Serial.println(headingDegrees);
-    #endif
+#endif
 
     _heading = headingDegrees;
-}
-
-int Platform::getHeading(){
-    return _heading;
+    return headingDegrees;
 }
 
 void Platform::displaySensorDetails()
@@ -180,11 +256,12 @@ void Platform::displaySensorDetails()
     delay(500);
 }
 
-void Platform::rotateTo(int setPoint){
-    float output = rotationPID.calculate(setPoint, _heading);
-    
-    if(output > 1) output = 1;
-    if(output < -1) output = -1;
+void Platform::rotateTo(int setPoint)
+{
+    float output = rotationPID.calculate(setPoint, getHeading());
+
+    CUTOFF1(output);
     _x = output;
+
     Serial.println(output);
 }

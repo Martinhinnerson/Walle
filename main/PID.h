@@ -2,7 +2,7 @@
 #define PID_H
 
 #include <Arduino.h>
-#include "debug.h"
+#include "settings.h"
 
 #define MOD(a) ((a > 360.0) ? (a - 360.0) : ((a < 0.0) ? (a + 360.0) : a))
 

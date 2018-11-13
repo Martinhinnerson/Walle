@@ -8,8 +8,20 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
 #include "PID.h"
-#include "debug.h"
+#include "settings.h"
+#include "timer.h"
+#include <jm_CPPM.h>
+#include <TFMini.h>
 
+
+//Cutoff everything outside of -1 < a < 1
+#define CUTOFF1(a) max(-1, min(a, 1))
+
+#define IDLE 0
+#define MANUAL 1
+#define AUTOMATIC 2
+#define MISSION 3
+#define RADIO 4
 
 class Platform
 {
@@ -20,6 +32,9 @@ class Platform
     //_x and _y are the input coordinated from the controller
     double _x;
     double _y;
+
+    //The mode the platform is currently in
+    int _mode;
 
   public:
     PID rotationPID;
@@ -33,16 +48,23 @@ class Platform
 
     Adafruit_HMC5883_Unified compass; // = Adafruit_HMC5883_Unified(12345);
 
+    Timer motorTimer; // timer for the motor updates
+    Timer PIDTimer; // timer for PID loop
+    Timer radioTimer; // timer for the radio
+
   public:
     Platform(); //constructor
     void begin();
+
+    void run(); //main loop of the platform, should be run in loop()
 
     void setSpeed(double speed);
     double getSpeed();
     void setDirection(int direction);
     int getDirection();
-    void setHeading();
     int getHeading();
+    void setMode(int mode);
+    int getMode();
 
     void runMotors();     // Run the motors with their set speed
     void mapToMotors();   // Map _x and _y to the motors
