@@ -3,12 +3,7 @@ TODOs:
 
   ☐ Emigrate the code to the Arduino Mega
     ☐ The cppm library might have to be customized to support the mega
-  ☐ Add accelerometer/gyro to the platform
-    These two might not be that neccesary so the priority is not that high
-  ☐ Implement proximity sensors
-    ☐ Test the sharp IR sensor
-    ☐ Create linear interpolation and calibrate the sensor data
-      The sensors won't give linearly increasing values with distance
+
   ☐ Implement the stepper motor for the lidar system
     It will be controlled with an H-bridge and probably the accelStepper library
   ☐ Implement the sound card to bea able to play sounds
@@ -22,6 +17,22 @@ TODOs:
     the wifi module will talk to the computer and both recieve and send data
   ☐ Create a communication protocol/class for sending sensor data
     It would be nice to have one unit controlling gathering and sending of the sendor data
+
+  Sensors:
+    ☐ Add accelerometer/gyro to the platform
+    These two might not be that neccesary so the priority is not that high
+    ☐ Implement proximity sensors
+      ☐ Test the sharp IR sensor
+      ☐ Create linear interpolation and calibrate the sensor data
+      The sensors won't give linearly increasing values with distance
+    ☐ Implement the TFmini on the arduino MEGA
+      The TFmini is connected to the I2c bus. So is the Magnetometer. There should not be a problem
+      since both are slaves but we have to make sure this is the case.
+  Timers:
+  ☐ Fix so that the timers work for the arduino Mega
+    Right now the arduino crashes at startup either when initializing the timers or the first time they are set.
+    This could have to do with timers on the MEGA2560 being different than the UNO
+    It could also be because of a collision with the jmCPPM library that i modified to support the MEGA
 
   PID:
     ☐ Add support for wraparound

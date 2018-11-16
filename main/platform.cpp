@@ -9,22 +9,27 @@ Platform::Platform()
     _heading = 0;
     _x = 0;
     _y = 0;
-    _mode = IDLE;
+    _mode = START_STATE;
 
     rotationPID = PID(0.05, 0, 0.01); //Kp Ki Kd
 
-    rightMotor = Motor::Motor(3, 2, 4, A1, 1);
-    leftMotor = Motor::Motor(6, 7, 5, A0, 0);
+    rightMotor = Motor::Motor(PWM_PIN_1, DIR1_PIN_1, DIR2_PIN_1, HALL_PIN_1, 1);
+    leftMotor = Motor::Motor(PWM_PIN_2, DIR1_PIN_2, DIR2_PIN_2, HALL_PIN_2, 0);
     radioInput = Radio::Radio();
     compass = Adafruit_HMC5883_Unified(12345);
 
-    motorTimer.setTimer(MOTOR_DELAY);
-    PIDTimer.setTimer(PID_DELAY);
-    radioTimer.setTimer(RADIO_DELAY);
+    //motorTimer.setTimer(MOTOR_DELAY);
+    //PIDTimer.setTimer(PID_DELAY);
+    //radioTimer.setTimer(RADIO_DELAY);
 }
 
 void Platform::begin()
 {
+    //DebugSerial->begin(SERIAL_BAUDRATE);
+
+    //DebugSerial->println("Initializing Walle...");
+    //delay(100);
+
     /* Initialise the sensor */
     if (!compass.begin())
     {
@@ -40,7 +45,6 @@ void Platform::begin()
     
     CPPM.begin();
     
-    Serial.begin(SERIAL_BAUDRATE);
 }
 
 /*
@@ -59,19 +63,21 @@ void Platform::run(){
 
     switch(_mode){
         case IDLE:
+            Serial.println("State = Idle");
+            delay(1000);
 
         break;
         case MANUAL:
             if(motorTimer.check()){
-                //mapToMotors();
-                //runMotors();
+                mapToMotors();
+                runMotors();
             }
         break;
         case AUTOMATIC:
 
             if(motorTimer.check()){
-                //mapToMotors();
-                //runMotors();
+                mapToMotors();
+                runMotors();
             }
             if(PIDTimer.check()){
                 //run PID loop
@@ -84,11 +90,11 @@ void Platform::run(){
         case RADIO:
             
             if(radioTimer.check()){
-                //readFromRadio();
+                readFromRadio();
             }
             if(motorTimer.check()){
-                //mapToMotors();
-                //runMotors();
+                mapToMotors();
+                runMotors();
             }
 
         break;

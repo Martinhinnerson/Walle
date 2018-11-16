@@ -17,11 +17,7 @@
 //Cutoff everything outside of -1 < a < 1
 #define CUTOFF1(a) max(-1, min(a, 1))
 
-#define IDLE 0
-#define MANUAL 1
-#define AUTOMATIC 2
-#define MISSION 3
-#define RADIO 4
+
 
 class Platform
 {
@@ -51,6 +47,8 @@ class Platform
     Timer motorTimer; // timer for the motor updates
     Timer PIDTimer; // timer for PID loop
     Timer radioTimer; // timer for the radio
+
+    //HardwareSerial *DebugSerial = &Serial;
 
   public:
     Platform(); //constructor
