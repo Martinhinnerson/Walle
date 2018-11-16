@@ -17,6 +17,8 @@ TODOs:
     the wifi module will talk to the computer and both recieve and send data
   ☐ Create a communication protocol/class for sending sensor data
     It would be nice to have one unit controlling gathering and sending of the sendor data
+  ☐ Change the pinmap for the arduino mega in settings.h
+    Currently it is just the same as the UNO
 
   Sensors:
     ☐ Add accelerometer/gyro to the platform

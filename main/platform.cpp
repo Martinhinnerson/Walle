@@ -11,7 +11,7 @@ Platform::Platform()
     _y = 0;
     _mode = START_STATE;
 
-    rotationPID = PID(0.05, 0, 0.01); //Kp Ki Kd
+    rotationPID = PID(KP_ROT, KI_ROT, KD_ROT); //Kp Ki Kd
 
     rightMotor = Motor::Motor(PWM_PIN_1, DIR1_PIN_1, DIR2_PIN_1, HALL_PIN_1, 1);
     leftMotor = Motor::Motor(PWM_PIN_2, DIR1_PIN_2, DIR2_PIN_2, HALL_PIN_2, 0);
