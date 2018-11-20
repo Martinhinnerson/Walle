@@ -13,7 +13,7 @@ class MapWidget(Widget):
     draw_from_text_file = properties.BooleanProperty(False)
     dragging_map = properties.BooleanProperty(False)
     translation = properties.ListProperty([0, 0])
-    translation_start = properties.ListProperty([0, 0])
+    translation_last_point = properties.ListProperty([0, 0])
     # data_file_path = properties.StringProperty()
 
     def __init__(self, **kwargs):
@@ -37,53 +37,29 @@ class MapWidget(Widget):
     def on_touch_down(self, touch):
         if self.inside_widget(touch, "touch"):
             self.dragging_map = True
-            self.translation_start = [touch.x, touch.y]
+            self.translation_last_point = [touch.x, touch.y]
             print("Start translation")
             print(self.translation)
-            # d = 30.
-            # self.obj = InstructionGroup()
-            # self.obj.add(Color(*self.draw_color))
-            # self.obj.add(Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d)))
-            # self.objects.append(self.obj)
-            # self.canvas.add(self.obj)
-            # with self.canvas:
-            #     Color(*self.draw_color)
-            #     d = 30.
-            #     Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
-            #     touch.ud['line'] = Line(points=(touch.x, touch.y))
 
     def on_touch_move(self, touch):
         # print("Touch: %f, %f" % (touch.x - self.center_x, touch.y - self.center_y))
-        self.translation[0] = -(self.translation_start[0] - touch.x) # - self.center_x 
-        self.translation[1] = -(self.translation_start[1] - touch.y) #- self.center_y
+        self.translation[0] += -(self.translation_last_point[0] - touch.x) # - self.center_x 
+        self.translation[1] += -(self.translation_last_point[1] - touch.y) #- self.center_y
         print(self.translation)
+        self.translation_last_point = [touch.x, touch.y]
         self.clear_canvas()
 
         if self.draw_from_text_file:
             self.draw_from_data_file()
-        # if self.inside_widget(touch, "touch"):  
-        #     Color(*self.draw_color) 
-        #     touch.ud['line'].points += [touch.x, touch.y]
-
 
     def on_touch_up(self, touch):      
         if self.inside_widget(touch, "touch"):
             if self.dragging_map:
                 self.dragging_map = False
-                self.translation[0] += -(self.translation_start[0] - touch.x)
-                self.translation[1] += -(self.translation_start[1] - touch.y)
+                self.translation[0] += -(self.translation_last_point[0] - touch.x)
+                self.translation[1] += -(self.translation_last_point[1] - touch.y)
                 print(self.translation)
                 print("End translations")
-            # d = 30.
-            # self.obj = InstructionGroup()
-            # self.obj.add(Color(*self.draw_color))
-            # self.obj.add(Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d)))
-            # self.objects.append(self.obj)
-            # self.canvas.add(self.obj)
-            # with self.canvas:
-            #     Color(*self.draw_color)
-            #     d = 30.
-            #     Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
 
     def clear_canvas(self):
         for obj in self.objects:
