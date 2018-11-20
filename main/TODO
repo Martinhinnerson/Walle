@@ -30,14 +30,12 @@ TODOs:
     ☐ Implement the TFmini on the arduino MEGA
       The TFmini is connected to the I2c bus. So is the Magnetometer. There should not be a problem
       since both are slaves but we have to make sure this is the case.
-  Timers:
   ☐ Fix so that the timers work for the arduino Mega
     Right now the arduino crashes at startup either when initializing the timers or the first time they are set.
     This could have to do with timers on the MEGA2560 being different than the UNO
     It could also be because of a collision with the jmCPPM library that i modified to support the MEGA
 
   PID:
-    ☐ Add support for wraparound
     in the case of eg. the rotation 0-360
     ☐ If a PID controller should be used a solution for integrator saturation has to be implemented
     ☐ Discrete controler -> Time, T_s, between each measurement has to be decided
@@ -48,6 +46,7 @@ TODOs:
     This is a stupid task and it should be done when the code is written...
 
 Archive:
+  ✔ Add support for wraparound @done(18-11-20 14:05) @project(TODOs.PID)
   ✔ Add different modes for the platform @done(18-11-12 09:53) @project(TODOs)
     For examle manual, automatic driving, lidar sensor mode etc.
     This will basically be a state machine in the platform class.
