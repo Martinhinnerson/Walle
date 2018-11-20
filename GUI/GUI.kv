@@ -6,6 +6,8 @@
     status: status_bar
     mission: mission_bar
     map: map_widget
+    draw_checkbox: draw_on_map_checkbox
+    draw_label: draw_on_map_label
     rows: 2
     BoxLayout:
         orientation: "vertical"
@@ -21,7 +23,7 @@
             id: mission_bar
         Button: 
             text: "Clear"
-            on_release: root.map.clear_canvas()
+            on_release: root.clear_canvas()
         BoxLayout:
             orientation: "horizontal"
             Label: 
