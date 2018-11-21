@@ -17,8 +17,6 @@
 //Cutoff everything outside of -1 < a < 1
 #define CUTOFF1(a) max(-1, min(a, 1))
 
-
-
 class Platform
 {
     double _speed;
@@ -48,7 +46,7 @@ class Platform
     Timer PIDTimer; // timer for PID loop
     Timer radioTimer; // timer for the radio
 
-    //HardwareSerial *DebugSerial = &Serial;
+    HardwareSerial *DebugSerial = &Serial;
 
   public:
     Platform(); //constructor

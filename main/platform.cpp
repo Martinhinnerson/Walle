@@ -18,28 +18,35 @@ Platform::Platform()
     radioInput = Radio::Radio();
     compass = Adafruit_HMC5883_Unified(12345);
 
-    //motorTimer.setTimer(MOTOR_DELAY);
-    //PIDTimer.setTimer(PID_DELAY);
-    //radioTimer.setTimer(RADIO_DELAY);
+    motorTimer = Timer();
+    PIDTimer = Timer();
+    radioTimer = Timer();
 }
 
 void Platform::begin()
 {
-    //DebugSerial->begin(SERIAL_BAUDRATE);
+    DebugSerial->begin(SERIAL_BAUDRATE);
 
-    //DebugSerial->println("Initializing Walle...");
-    //delay(100);
+    DebugSerial->println("Initializing Walle...");
+    delay(100);
+
+    motorTimer.setTimer(MOTOR_DELAY);
+    delay(200);
+    PIDTimer.setTimer(PID_DELAY);
+    delay(200);
+    radioTimer.setTimer(RADIO_DELAY);
+    delay(200);
 
     /* Initialise the sensor */
     if (!compass.begin())
     {
         /* There was a problem detecting the HMC5883 ... check your connections */
-        Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
+            DebugSerial->println("Ooops, no HMC5883 detected ... Check your wiring!");
         while (1);
     }
     if (rotationPID.err())
     {
-        Serial.println("There was a configuration error with the rotationPID");
+            DebugSerial->println("There was a configuration error with the rotationPID");
         while (1);
     }
     
@@ -63,7 +70,7 @@ void Platform::run(){
 
     switch(_mode){
         case IDLE:
-            Serial.println("State = Idle");
+            DebugSerial->println("State = Idle");
             delay(1000);
 
         break;
@@ -78,9 +85,11 @@ void Platform::run(){
             if(motorTimer.check()){
                 mapToMotors();
                 runMotors();
+                //DebugSerial->println("Motor");
             }
             if(PIDTimer.check()){
                 //run PID loop
+                //DebugSerial->println("PID");
             }
 
         break;
@@ -99,7 +108,7 @@ void Platform::run(){
 
         break;
         default:
-            Serial.println("Error, this state does not exist. Going back to idle.");
+                DebugSerial->println("Error, this state does not exist. Going back to idle.");
             _mode = IDLE;
         break;
     }
@@ -172,20 +181,7 @@ void Platform::mapToMotors()
     leftMotor.setSpeed(left);
     rightMotor.setSpeed(right);
 
-#ifdef DEBUG_MOTORS
-    Serial.print("Mapped: ");
-    Serial.print(_y);
-    Serial.print(", ");
-    Serial.println(_x);
-    Serial.print("Radius and angle: ");
-    Serial.print(r);
-    Serial.print(", ");
-    Serial.println(t);
-    Serial.print("Left: ");
-    Serial.print(left);
-    Serial.print(", ");
-    Serial.print("Right: ");
-    Serial.println(right);
+#ifdef DEBUG_MOTORS         DebugSerial->print("Mapped: ");         DebugSerial->print(_y);     DebugSerial->print(", ");        DebugSerial->println(_x);       DebugSerial->print("Radius and angle: ");         DebugSerial->print(r);        DebugSerial->print(", ");      DebugSerial->println(t);        DebugSerial->print("Left: ");          DebugSerial->print(left);          DebugSerial->print(", ");       DebugSerial->print("Right: ");       DebugSerial->println(right);
 #endif
 }
 
@@ -218,19 +214,7 @@ int Platform::getHeading()
     int headingDegrees = heading * 180 / M_PI;
 
 #ifdef DEBUG_COMPASS
-    /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-    Serial.print("X: ");
-    Serial.print(event.magnetic.x);
-    Serial.print("  ");
-    Serial.print("Y: ");
-    Serial.print(event.magnetic.y);
-    Serial.print("  ");
-    Serial.print("Z: ");
-    Serial.print(event.magnetic.z);
-    Serial.print("  ");
-    Serial.println("uT");
-    Serial.print("Heading (degrees): ");
-    Serial.println(headingDegrees);
+    /* Display the results (magnetic vector values are in micro-Tesla (uT)) */          DebugSerial->print("X: ");          DebugSerial->print(event.magnetic.x);       DebugSerial->print("  ");         DebugSerial->print("Y: ");      DebugSerial->print(event.magnetic.y);        DebugSerial->print("  ");       DebugSerial->print("Z: ");         DebugSerial->print(event.magnetic.z);        DebugSerial->print("  ");    DebugSerial->println("uT");          DebugSerial->print("Heading (degrees): ");      DebugSerial->println(headingDegrees);
 #endif
 
     _heading = headingDegrees;
@@ -240,25 +224,7 @@ int Platform::getHeading()
 void Platform::displaySensorDetails()
 {
     sensor_t sensor;
-    compass.getSensor(&sensor);
-    Serial.println("------------------------------------");
-    Serial.print("Sensor:       ");
-    Serial.println(sensor.name);
-    Serial.print("Driver Ver:   ");
-    Serial.println(sensor.version);
-    Serial.print("Unique ID:    ");
-    Serial.println(sensor.sensor_id);
-    Serial.print("Max Value:    ");
-    Serial.print(sensor.max_value);
-    Serial.println(" uT");
-    Serial.print("Min Value:    ");
-    Serial.print(sensor.min_value);
-    Serial.println(" uT");
-    Serial.print("Resolution:   ");
-    Serial.print(sensor.resolution);
-    Serial.println(" uT");
-    Serial.println("------------------------------------");
-    Serial.println("");
+    compass.getSensor(&sensor);         DebugSerial->println("------------------------------------");           DebugSerial->print("Sensor:       ");       DebugSerial->println(sensor.name);       DebugSerial->print("Driver Ver:   ");         DebugSerial->println(sensor.version);         DebugSerial->print("Unique ID:    ");          DebugSerial->println(sensor.sensor_id);         DebugSerial->print("Max Value:    ");       DebugSerial->print(sensor.max_value);     DebugSerial->println(" uT");       DebugSerial->print("Min Value:    ");         DebugSerial->print(sensor.min_value);         DebugSerial->println(" uT");           DebugSerial->print("Resolution:   ");       DebugSerial->print(sensor.resolution);          DebugSerial->println(" uT");           DebugSerial->println("------------------------------------");       DebugSerial->println("");
     delay(500);
 }
 
@@ -268,6 +234,5 @@ void Platform::rotateTo(int setPoint)
 
     CUTOFF1(output);
     _x = output;
-
-    Serial.println(output);
+            DebugSerial->println(output);
 }

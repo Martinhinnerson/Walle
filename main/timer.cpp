@@ -43,10 +43,6 @@ boolean Timer::check()
  */ 
 void Timer::setTimer(unsigned long d)
 {
-
-    Serial.print("Created timer with delay: ");
-    Serial.println(d);
-
     _delay = d;
     _enabled = true;
     _prev_millis = millis();

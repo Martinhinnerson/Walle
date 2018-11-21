@@ -31,12 +31,7 @@ Platform walle; // instansiate the platform with the default constructor
 // =============================================================================
 void setup()
 {
-  Serial.begin(SERIAL_BAUDRATE);
-  Serial.println("Initializing Walle...");
-  delay(100);
   walle.begin();
-  delay(1000);
-  Serial.println("Walle initialized.");
 }
 
 // =============================================================================
