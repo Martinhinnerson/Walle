@@ -25,7 +25,11 @@ Platform::Platform()
 
 void Platform::begin()
 {
-    DebugSerial->begin(SERIAL_BAUDRATE);
+    DebugSerial->begin(DEBUG_SERIAL_BAUDRATE);
+    
+    Serial1.begin(MAIN_SERIAL_BAUDRATE);
+    //MainSerial.setStream(&Serial1);
+    //MainSerial.setPacketHandler(&processPacketFromSender);
 
     DebugSerial->println("Initializing Walle...");
     delay(100);
@@ -67,6 +71,9 @@ void Platform::begin()
  * Outputs: none
  */
 void Platform::run(){
+
+//Allways read serial input
+MainSerial.update();
 
     switch(_mode){
         case IDLE:
@@ -235,4 +242,9 @@ void Platform::rotateTo(int setPoint)
     CUTOFF1(output);
     _x = output;
             DebugSerial->println(output);
+}
+
+void Platform::processPacketFromSender(const uint8_t* buffer, size_t size)
+{
+
 }

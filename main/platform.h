@@ -12,6 +12,7 @@
 #include "timer.h"
 #include <jm_CPPM.h>
 #include <TFMini.h>
+#include  <PacketSerial.h>
 
 
 //Cutoff everything outside of -1 < a < 1
@@ -47,6 +48,7 @@ class Platform
     Timer radioTimer; // timer for the radio
 
     HardwareSerial *DebugSerial = &Serial;
+    PacketSerial MainSerial;
 
   public:
     Platform(); //constructor
@@ -67,6 +69,8 @@ class Platform
     void readFromRadio(); // Read the input from the radio reciever
 
     void rotateTo(int setPoint);
+
+    void processPacketFromSender(const uint8_t* buffer, size_t size);
 
     void displaySensorDetails();
 };

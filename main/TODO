@@ -19,6 +19,10 @@ TODOs:
   Communication:
     ☐ Create a communication protocol/class for sending sensor data
       It would be nice to have one unit controlling gathering and sending of the sendor data
+      ☐ Implement the PacketSerial library @started(18-11-21 19:14)
+        https://github.com/bakercp/PacketSerial
+      ☐ Implement COBS
+        https://pythonhosted.org/cobs/cobs.cobs.html#cobs-examples
     ☐ Add a bluetooth module with passthrough for the serial out
       This should not be the same serial as the one used to debug
     ☐ Add the WIFI module and implement TCP protocol (not priority)
