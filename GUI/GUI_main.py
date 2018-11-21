@@ -41,6 +41,8 @@ class GUIWidget(GridLayout):
     status = properties.ObjectProperty(None)
     mission = properties.ObjectProperty(None)
     map = properties.ObjectProperty(None)
+    draw_checkbox = properties.ObjectProperty(None)
+    draw_label = properties.ObjectProperty(None)
 
     #Define serial port
     #ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=115200, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=5)
@@ -66,6 +68,9 @@ class GUIWidget(GridLayout):
         self.status.speed = speed
         self.status.direction = direction
 
+    def clear_canvas(self):
+        self.check_box_pressed(self.draw_label.text, False)
+        self.draw_checkbox.active = False
 
     def update(self, dt):
         speed = randint(0,10) # m/s
@@ -90,6 +95,8 @@ class GUIWidget(GridLayout):
         return direction
 
     def check_box_pressed(self, id, status):
+        print(id)
+        print(status)
         if id == "Draw on map":
             if status:
                 self.map.draw_from_data_file()
