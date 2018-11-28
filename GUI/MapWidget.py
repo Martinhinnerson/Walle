@@ -35,22 +35,19 @@ class MapWidget(Widget):
             self.draw_from_data_file()
 
     def on_touch_down(self, touch):
-        if self.inside_widget(touch, "touch"):
+        if self.inside_widget(touch, "touch") and self.draw_from_text_file:
             self.dragging_map = True
             self.translation_last_point = [touch.x, touch.y]
-            print("Start translation")
-            print(self.translation)
 
     def on_touch_move(self, touch):
         # print("Touch: %f, %f" % (touch.x - self.center_x, touch.y - self.center_y))
-        self.translation[0] += -(self.translation_last_point[0] - touch.x) # - self.center_x 
-        self.translation[1] += -(self.translation_last_point[1] - touch.y) #- self.center_y
-        print(self.translation)
-        self.translation_last_point = [touch.x, touch.y]
-        self.clear_canvas()
-
-        if self.draw_from_text_file:
-            self.draw_from_data_file()
+        if self.dragging_map:
+            self.translation[0] += -(self.translation_last_point[0] - touch.x) # - self.center_x 
+            self.translation[1] += -(self.translation_last_point[1] - touch.y) #- self.center_y
+            self.translation_last_point = [touch.x, touch.y]
+            self.clear_canvas()
+            if self.draw_from_text_file:
+                self.draw_from_data_file()
 
     def on_touch_up(self, touch):      
         if self.inside_widget(touch, "touch"):
@@ -58,15 +55,14 @@ class MapWidget(Widget):
                 self.dragging_map = False
                 self.translation[0] += -(self.translation_last_point[0] - touch.x)
                 self.translation[1] += -(self.translation_last_point[1] - touch.y)
-                print(self.translation)
-                print("End translations")
 
     def clear_canvas(self):
         for obj in self.objects:
             self.canvas.remove(obj)
 
         self.objects.clear()
-        self.draw_from_text_file = False
+        if not self.dragging_map:
+            self.draw_from_text_file = False
     
     def inside_widget(self, touch, type):
         bottom_left_x = self.center_x - self.width/2

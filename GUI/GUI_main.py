@@ -95,15 +95,11 @@ class GUIWidget(GridLayout):
         return direction
 
     def check_box_pressed(self, id, status):
-        print(id)
-        print(status)
         if id == "Draw on map":
             if status:
                 self.map.draw_from_data_file()
             else:
                 self.map.clear_canvas()
-        
-        
         
         
 class AddButton(Button):
