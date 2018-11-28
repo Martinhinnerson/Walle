@@ -1,42 +1,45 @@
 TODOs:
   Add various todos here
 
-  ☐ Emigrate the code to the Arduino Mega
-    ☐ The cppm library might have to be customized to support the mega
-
+  ☐ Emigrate the code to the Arduino Mega @started(18-11-21 10:06)
+    ☐ The cppm library might have to be customized to support the mega @started(18-11-21 10:06)
+      I beleive the library works now but it has to be tested
   ☐ Implement the stepper motor for the lidar system
     It will be controlled with an H-bridge and probably the accelStepper library
+  ☐ Make it so that the radio reciever is diabled if the controller is not turned on
+    Right now if the controller is not on when the platform is on weird things can happen
+    The platform should be able to sense when there is not radio signals being recieved
+  ☐ Change the pinmap for the arduino mega in settings.h
+    Currently it is just the same as the UNO
   ☐ Implement the sound card to bea able to play sounds
     The one we have is a Adafruit Mini Audio FX board 16Mb
   ☐ Add an LCD screen for information, status, mode etc.
     The one we have is a BT21605AV which uses I2C communication
-  ☐ Make it so that the radio reciever is diabled if the controller is not turned on
-    Right now if the controller is not on when the platform is on weird things can happen
-    The platform should be able to sense when there is not radio signals being recieved
-  ☐ Add serial communication support to talk to the WIFI module
-    the wifi module will talk to the computer and both recieve and send data
-  ☐ Create a communication protocol/class for sending sensor data
-    It would be nice to have one unit controlling gathering and sending of the sendor data
-  ☐ Change the pinmap for the arduino mega in settings.h
-    Currently it is just the same as the UNO
+    
+  Communication:
+    ☐ Create a communication protocol/class for sending sensor data
+      It would be nice to have one unit controlling gathering and sending of the sendor data
+      ☐ Implement the PacketSerial library @started(18-11-21 19:14)
+        https://github.com/bakercp/PacketSerial
+      ☐ Implement COBS
+        https://pythonhosted.org/cobs/cobs.cobs.html#cobs-examples
+    ☐ Add a bluetooth module with passthrough for the serial out
+      This should not be the same serial as the one used to debug
+    ☐ Add the WIFI module and implement TCP protocol (not priority)
+      the wifi module will talk to the computer and both recieve and send data
 
   Sensors:
-    ☐ Add accelerometer/gyro to the platform
-    These two might not be that neccesary so the priority is not that high
+    ☐ Implement the TFmini on the arduino MEGA
+    The TFmini is connected to the I2c bus. So is the Magnetometer. There should not be a problem
+    since both are slaves but we have to make sure this is the case.
     ☐ Implement proximity sensors
       ☐ Test the sharp IR sensor
-      ☐ Create linear interpolation and calibrate the sensor data
-      The sensors won't give linearly increasing values with distance
-    ☐ Implement the TFmini on the arduino MEGA
-      The TFmini is connected to the I2c bus. So is the Magnetometer. There should not be a problem
-      since both are slaves but we have to make sure this is the case.
-  ☐ Fix so that the timers work for the arduino Mega
-    Right now the arduino crashes at startup either when initializing the timers or the first time they are set.
-    This could have to do with timers on the MEGA2560 being different than the UNO
-    It could also be because of a collision with the jmCPPM library that i modified to support the MEGA
-
+    ☐ Create linear interpolation and calibrate the sensor data
+    The sensors won't give linearly increasing values with distance
+    ☐ Add accelerometer/gyro to the platform
+    These two might not be that neccesary so the priority is not that high
+      
   PID:
-    in the case of eg. the rotation 0-360
     ☐ If a PID controller should be used a solution for integrator saturation has to be implemented
     ☐ Discrete controler -> Time, T_s, between each measurement has to be decided
     
@@ -46,7 +49,12 @@ TODOs:
     This is a stupid task and it should be done when the code is written...
 
 Archive:
+  ✔ Fix so that the timers work for the arduino Mega @started(18-11-21 18:25) @done(18-11-21 18:25) @lasted(57s) @project(TODOs.Sensors)
+    Right now the arduino crashes at startup either when initializing the timers or the first time they are set.
+    This could have to do with timers on the MEGA2560 being different than the UNO
+    It could also be because of a collision with the jmCPPM library that i modified to support the MEGA
   ✔ Add support for wraparound @done(18-11-20 14:05) @project(TODOs.PID)
+    in the case of eg. the rotation 0-360
   ✔ Add different modes for the platform @done(18-11-12 09:53) @project(TODOs)
     For examle manual, automatic driving, lidar sensor mode etc.
     This will basically be a state machine in the platform class.

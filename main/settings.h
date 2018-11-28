@@ -35,7 +35,7 @@
 // If Arduino MEGA is used
 #elif defined (__AVR_ATmega2560__) //Arduino MEGA
 
-//TODO: The following pins should be changed
+//TODO: The following pins should be changed depending on what we use for the MEGA
 
 //Motor1
 #define PWM_PIN_1           3
@@ -68,7 +68,8 @@
 // =============================================================================
 // Communication
 // =============================================================================
-#define SERIAL_BAUDRATE 115200
+#define DEBUG_SERIAL_BAUDRATE          115200
+#define MAIN_SERIAL_BAUDRATE    115200
 
 // =============================================================================
 // Platform settings

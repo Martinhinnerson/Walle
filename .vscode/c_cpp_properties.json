@@ -2,21 +2,6 @@
     "configurations": [
         {
             "name": "Mac",
-            "includePath": [
-               /* "/Users/martinhinnerson/Documents/Arduino/libraries/TFMini/src",
-                "/Users/martinhinnerson/Documents/Arduino/libraries/FastPID/src",
-                "/Users/martinhinnerson/Documents/Arduino/libraries/Adafruit_HMC5883_Unified",
-                "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/tools/**",
-                "/Users/martinhinnerson/Library/Arduino15/packages/esp8266/hardware/esp8266/2.3.0/**",
-                "/Users/martinhinnerson/Documents/Arduino/libraries/WiFiEsp/src",
-                "/Users/martinhinnerson/Documents/Arduino/libraries/Adafruit_SoftServo",
-                "/Applications/Arduino.app/Contents/Java/libraries/Servo/src",
-                "/Users/martinhinnerson/Library/Arduino15/packages/arduino/tools/**",
-                "/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/**" */
-            ],
-            "forcedInclude": [
-                //"/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino/Arduino.h"
-            ],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks"
@@ -24,7 +9,15 @@
             "intelliSenseMode": "clang-x64",
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
-            "cppStandard": "c++17"
+            "cppStandard": "c++17",
+            "includePath": [
+                "/Users/martinhinnerson/Documents/Arduino/libraries/PacketSerial/src",
+                "/Users/martinhinnerson/Library/Arduino15/packages/arduino/tools/**",
+                "/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/**"
+            ],
+            "forcedInclude": [
+                "/Users/martinhinnerson/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino/Arduino.h"
+            ]
         }
     ],
     "version": 4
