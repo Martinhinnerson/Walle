@@ -66,10 +66,7 @@ class MapWidget(Widget):
             self.canvas.remove(obj)
 
         self.objects.clear()
-        # self.canvas.clear()
-        # with self.canvas:
-        #     Color(*self.background)
-        #     Rectangle(pos=self.pos, size=self.size)
+        self.draw_from_text_file = False
     
     def inside_widget(self, touch, type):
         bottom_left_x = self.center_x - self.width/2
