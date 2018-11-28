@@ -1,0 +1,11 @@
+#:kivy 1.0.9
+
+<ConsoleWidget>:
+    rows: 1
+    columns: 1
+    Label:
+        id: console_label
+        text: root.command_line
+        text_size: root.width, None
+        size: self.texture_size
+        halign: "left"

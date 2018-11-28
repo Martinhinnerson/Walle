@@ -24,7 +24,6 @@ import serial
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.uix.video import Video
 
-
 # Load all .kv files from /kv
 kv_path = './kv/'
 for kv in listdir(kv_path):
@@ -32,6 +31,7 @@ for kv in listdir(kv_path):
 
 importlib.import_module("StatusBar")
 importlib.import_module("MapWidget")
+importlib.import_module("ConsoleWidget")
 
 
 class GUIWidget(GridLayout):
@@ -43,6 +43,7 @@ class GUIWidget(GridLayout):
     map = properties.ObjectProperty(None)
     draw_checkbox = properties.ObjectProperty(None)
     draw_label = properties.ObjectProperty(None)
+    console = properties.ObjectProperty(None)
 
     #Define serial port
     #ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=115200, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=5)
