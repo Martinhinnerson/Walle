@@ -10,11 +10,13 @@ TODOs:
         This is a bigger task
         We first have to decide on the platform side of it how we want to send stuff.
         We should probably implement some type of packet based communication
+    ☐ Implement zoom feature on map
     ☐ Implement console window
         ☐ There should be a line where you can write commands to send to the robot
-        ☐ Above the command line there should be a history of previously sent commands
+        ✘ Above the command line there should be a history of previously sent commands @cancelled(18-11-30 21:53)
         ☐ It should be possible to access previously sent commands by using the arrow keys while the command line is chosen
-        ☐ The command line should be below the history
+        ✘ The command line should be below the history @cancelled(18-11-30 21:53)
+            This is hard, maybe implement it in the future
         ☐ The text size should be consant, but the number of lines visible in the history should be dependent on the main window size
 Archive:
   ✔ Variable 'ser' is global, move to main class or status class? @done(18-11-09 22:27) @project(TODOs)

@@ -10,6 +10,7 @@
     draw_label: draw_on_map_label
     console: console_
     rows: 2
+    cols: 2
     BoxLayout:
         orientation: "vertical"
         AddButton:
@@ -36,11 +37,15 @@
     BoxLayout:
         orientation: "vertical"
         MapWidget:
-            id: map_widget    
-    Label:
-        id: display
-        font_size: dp(50)
-        text: '0'
-    ConsoleWidget:
-        id: console_
+            id: map_widget   
+    BoxLayout:
+        orientation: "vertical"
+        ConsoleWidget:
+            id: console_
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            id: display
+            font_size: dp(50)
+            text: '0'
     
