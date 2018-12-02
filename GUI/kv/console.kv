@@ -1,20 +1,21 @@
 #:kivy 1.0.9
 
 <ConsoleWidget>:
-    console_label: console
+    # console_label: console
     text_input: input
     BoxLayout:
         orientation: "vertical"
-        Label:
-            id: console
-            text_size: self.size
-            halign: "left"
-            valign: "middle"
-            font_size: root.text_size
-            text: root.command_line
-            # font_size: root.text_size
-            markup: True    
-            on_ref_press: root.command_line_activated()
+        # Label:
+        #     id: console
+        #     text_size: self.size
+        #     halign: "left"
+        #     valign: "middle"
+        #     font_size: root.text_size
+        #     text: root.command_line
+        #     # font_size: root.text_size
+        #     markup: True    
+        #     on_ref_press: root.command_line_activated()
         TextInput:
             id: input
-            text: "Write here"
+            text: root.command_line
+            multiline: False

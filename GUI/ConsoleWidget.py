@@ -18,7 +18,7 @@ class ConsoleWidget(FloatLayout):
     text_size = properties.NumericProperty(TEXT_SIZE)
     max_memory = properties.NumericProperty(MAX_MEMORY_SIZE)
     max_lines_visible = properties.NumericProperty(MINIMUM_VISIBLE_LINES)
-    command_line = properties.StringProperty("[ref=console]" + "Write command here..." + "[/ref]")
+    command_line = properties.StringProperty("[ref=text_input]" + "Write command here..." + "[/ref]")
     text_input = properties.ObjectProperty()    
 
     def __init__(self, **kwargs):
@@ -34,8 +34,8 @@ class ConsoleWidget(FloatLayout):
         print("Writing command!")
 
     def format_string_to_command_line(self, string):
-        print("New value: " + "[ref=console]" + string + "[/ref]")
-        return "[ref=console]" + string + "[/ref]"
+        print("New value: " + "[ref=text_input]" + string + "[/ref]")
+        return "[ref=text_input]" + string + "[/ref]"
 
     def append_char_to_command_line(self, char):
         line = self.command_line

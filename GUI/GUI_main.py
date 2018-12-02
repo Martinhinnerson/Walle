@@ -46,12 +46,12 @@ class GUIWidget(GridLayout):
     console = properties.ObjectProperty(None)
 
     #Define serial port
-    #ser = serial.Serial(port='/dev/cu.usbmodem141401', baudrate=115200, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=5)
+    ser = serial.Serial(port='/dev/cu.Bluetooth-Incoming-Port', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=1)
 
     def get_direction(self):
         return self.status.get_dir()
 
-    def add_one(self, increment):
+    def add_one(self, increment): 
         value = int(self.display.text)
         self.display.text = str(value+increment)
 
@@ -75,15 +75,23 @@ class GUIWidget(GridLayout):
 
     def update(self, dt):
         speed = randint(0,10) # m/s
-  
-        # dir = self.readSerial(1)
-        # try:
-        #     # This will make it a float, if the string is not a float it will throw an error
-        #     print(dir)
-        #     direction = float(dir)
+        
+        if not self.ser.is_open:
+            print("Open serial")
+            self.ser.open()
+        else:
+            print(self.ser.is_open)
+            received_data = self.readSerial(1)
+    
+        try:
+            # This will make it a float, if the string is not a float it will throw an error
+            # print(dir)
+            # direction = float(dir)
+            # if received_data is not 0:
+            print("Received: %s" % received_data)
             
-        # except ValueError: # this deals will the error
-        #     direction = self.get_direction() # if we don't change the value we read the old one
+        except ValueError: # this deals will the error
+            direction = self.get_direction() # if we don't change the value we read the old one
 
         
         mission = self.mission.current_mission
@@ -92,7 +100,9 @@ class GUIWidget(GridLayout):
         self.set_status(self.status.connection, mission, speed, direction)
 
     def readSerial(self, dt):
-        direction = 0#self.ser.readline().decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
+        print("Read from serial")
+        direction = self.ser.readline() #.decode('UTF-8')  #The values read with .readline() is byte literals eg. b'56/r/n' When i decode to UTF-8 i this would print as only 56
+        print("Finished reading")
         return direction
 
     def check_box_pressed(self, id, status):
@@ -127,7 +137,7 @@ class GUIApp(App):
         GUI = GUIWidget()
         GUI.set_button_values(2,2)
         GUI.set_status("None", "None", 0, 0)
-        #Clock.schedule_interval(GUI.readSerial, 1.0 / 60.0) # Reads from serial port
+        Clock.schedule_interval(GUI.readSerial, 1.0 / 60.0) # Reads from serial port
         Clock.schedule_interval(GUI.update, 1.0 / 60.0)
 
         return GUI
