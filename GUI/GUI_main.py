@@ -7,7 +7,8 @@ import kivy.properties as properties
 import importlib
 import threading
 import sys
-import Queue
+import queue
+import time
 
 # Specific imports
 from kivy.app import App
@@ -17,14 +18,13 @@ from kivy.vector import Vector
 from kivy.clock import Clock
 from random import randint
 from kivy.uix.button import Button
-from os import listdir 
+from os import listdir
 from kivy.lang import Builder
 from kivy.uix.checkbox import CheckBox
 
 
-#This is for PySerial
+# This is for PySerial
 import serial
-
 
 
 from kivy.graphics import Color, Ellipse, Line, Rectangle
@@ -40,6 +40,10 @@ importlib.import_module("MapWidget")
 importlib.import_module("ConsoleWidget")
 
 
+# Define queue where threads put functions for the main thread to run
+callback_queue = queue.Queue()
+
+
 class GUIWidget(GridLayout):
     display = properties.ObjectProperty()
     add = properties.ObjectProperty(None)
@@ -51,35 +55,40 @@ class GUIWidget(GridLayout):
     draw_label = properties.ObjectProperty(None)
     console = properties.ObjectProperty(None)
 
-     # Define queue where threads put functions for the main thread to run
-    callback_queue = Queue.Queue()
+    serialEnabled = False
 
     # Call this function in a thred to pass a function call to the main thread queue
-    def call_in_main(func):
+
+    def call_in_main(self, func):
         callback_queue.put(func)
 
     # Run this function in main to check if a function has been called
-    def wait_for_callback():
+    def check_for_callback(self):
         while True:
             try:
                 # Does not block if queue is empty
                 callback = callback_queue.get(False)
-            except Queue.Empty:
+            except queue.Empty:
                 break
             callback()
 
-
     def __init__(self, **kwargs):
         super(GUIWidget, self).__init__(**kwargs)
-        #Define serial port
-        self.ser = serial.Serial(port="/dev/cu.usbmodem1421", baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0.1)
+        # Define serial port OBS CHANGE TO CORRECT PORT
+        self.ser = serial.Serial(port="/dev/cu.Bluetooth-Incoming-Port", baudrate=9600,
+                                 parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0.1)
         self.serial_data = []
         self.serial_lock = threading.Lock()
+
+        #Test creating 2 threads 
+        threading.Thread(target=self.test_run, args=("a",)).start()
+        threading.Thread(target=self.test_run, args=("b",)).start()
+
 
     def get_direction(self):
         return self.status.get_dir()
 
-    def add_one(self, increment): 
+    def add_one(self, increment):
         value = int(self.display.text)
         self.display.text = str(value+increment)
 
@@ -102,8 +111,8 @@ class GUIWidget(GridLayout):
         self.draw_checkbox.active = False
 
     def update(self, dt):
-        speed = randint(0,10) # m/s
-              
+        speed = randint(0, 10)  # m/s
+
         mission = self.mission.current_mission
         direction = self.get_direction()
 
@@ -121,7 +130,7 @@ class GUIWidget(GridLayout):
                 self.ser.open()
             else:
                 # print("Read from serial")
-                received_data = self.ser.readline() 
+                received_data = self.ser.readline()
                 # print("Finished reading")
                 # self.ser.write(b'Hello')
 
@@ -133,11 +142,12 @@ class GUIWidget(GridLayout):
                         self.status_lock.acquire()
                         self.direction = float(received_data.decode('UTF-8'))
                         self.serial_data.append(received_data)
-                    
-                except ValueError: # this deals will the error
+
+                except ValueError:  # this deals will the error
                     print("ValueError")
-                    direction = self.get_direction() # if we don't change the value we read the old one
-            
+                    # if we don't change the value we read the old one
+                    direction = self.get_direction()
+
             # self.ser.write(b'Read me$')
         finally:
             self.serial_lock.release()
@@ -148,19 +158,28 @@ class GUIWidget(GridLayout):
                 self.map.draw_from_data_file()
             else:
                 self.map.clear_canvas()
-    
+
     def test_thread(self, *args):
         Clock.schedule_interval(self.test, 1.0 / 1.0)
-    
+
     def test(self, *args):
         self.serial_lock.acquire()
-        try:            
+        try:
             for i in self.serial_data:
                 print("Received: %s" % i)
             self.serial_data = []
         finally:
             self.serial_lock.release()
-        
+
+    def print_test(self, dummyid, n):
+        print("From %s: %d" % (dummyid, n))
+
+    def test_run(self, dummyid):
+        for i in range(0, 5):
+            self.call_in_main(lambda: self.print_test(dummyid, i))
+            time.sleep(0.5)
+
+
 class AddButton(Button):
     increment_value = properties.NumericProperty(0)
     # value = properties.ReferenceListProperty(increment_value)
@@ -177,26 +196,36 @@ class MissionBar(GridLayout):
     def set_mission(self, mission):
         self.current_mission = mission
 
+
 class GUIApp(App):
     def build(self):
         self.title = "Dank GUI"
 
         GUI = GUIWidget()
-        GUI.set_button_values(2,2)
+        GUI.set_button_values(2, 2)
         GUI.set_status("None", "None", 0, 0)
         # Clock.schedule_interval(GUI.readSerial, 1.0 / 60.0) # Reads from serial port
-        try:
-            serial_thread = threading.Thread(target=GUI.serial_thread_function, args=GUI.serial_data)
-            serial_thread.start()
-            # test = threading.Thread(target=GUI.test_thread, args=GUI.serial_data)
-            # test.start()
-        except (KeyboardInterrupt, SystemExit):
-            print("Clean up")
-            sys.exit()
-        
+
+        if(GUI.serialEnabled):
+            try:
+                serial_thread = threading.Thread(
+                    target=GUI.serial_thread_function, args=GUI.serial_data)
+                serial_thread.start()
+                # test = threading.Thread(target=GUI.test_thread, args=GUI.serial_data)
+                # test.start()
+            except (KeyboardInterrupt, SystemExit):
+                print("Clean up")
+                sys.exit()
+
         Clock.schedule_interval(GUI.update, 1.0 / 60.0)
+
+        print("Before Callback")
+        # Check the queue if a thread has passed a new function to the main thread
+        GUI.check_for_callback() #This function should be called on schedule instead
+        print("After Callback")
 
         return GUI
 
+
 if __name__ == "__main__":
-    GUIApp().run()  
+    GUIApp().run()
