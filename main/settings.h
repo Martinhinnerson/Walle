@@ -1,3 +1,10 @@
+//========================================================================================
+/*                                                                                      *
+ *                                       SETTINGS                                       *
+ *                                                                                      */
+//========================================================================================
+
+
 #ifndef DEBUG_H
 #define DEBUG_H
 
@@ -35,17 +42,16 @@
 // If Arduino MEGA is used
 #elif defined (__AVR_ATmega2560__) //Arduino MEGA
 
-//TODO: The following pins should be changed depending on what we use for the MEGA
-//Note that pin 2-13 is PWM pins and should probably not be used for pins that won't need PWM
+//TODO: Pin 2-13 is PWM pins and should probably not be used for pins that won't need PWM
 
 //Motor1
-#define PWM_PIN_1           4
+#define PWM_PIN_1           4 //PWM
 #define DIR1_PIN_1          5
 #define DIR2_PIN_1          6
 #define HALL_PIN_1          A1
 
 //Motor2
-#define PWM_PIN_2           8
+#define PWM_PIN_2           8 //PWM
 #define DIR1_PIN_2          9
 #define DIR2_PIN_2          10
 #define HALL_PIN_2          A0
@@ -58,12 +64,12 @@
 #define RADIO_SIG_I         11
 
 //Stepper Motor
-#define STEPPER_PIN_1       26
-#define STEPPER_PIN_2       24
-#define STEPPER_PIN_3       32
-#define STEPPER_PIN_4       30
-#define STEPPER_ENABLE      22
-#define STEPPER_ENABLE_2    28
+#define STEPPER_STEP_PIN    2 //PWM
+#define STEPPER_DIR_PIN     3
+#define STEPPER_ENABLE_PIN  34
+
+//Servo
+#define LIDAR_SERVO_PIN     35
 
 #endif
 
@@ -108,10 +114,10 @@
 // =============================================================================
 // Stepper settings
 // =============================================================================
-#define STEPPER_SPEED       100
-#define STEPPER_ACCEL       10
+#define STEPPER_SPEED       2000
+#define STEPPER_ACCEL       500
 
-#define STEPS_PER_REV       200
+#define STEPS_PER_REV       200*16
 
 // =============================================================================
 // Motor settings
@@ -119,5 +125,11 @@
 #define MOTOR_DEADBAND      0.05
 #define PWM_MIN             50
 #define PWM_MAX             255
+
+// =============================================================================
+// Servo Settings
+// =============================================================================
+#define LIDAR_SERVO_START   90 // (0-180)
+
 
 #endif

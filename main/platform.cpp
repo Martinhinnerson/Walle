@@ -1,7 +1,15 @@
+//========================================================================================
+/*                                                                                      *
+ *                                       PLATFORM                                       *
+ *                                                                                      */
+//========================================================================================
+
 #include <Arduino.h>
 #include "platform.h"
 
-//Constructor
+// =============================================================================
+// Constructor
+// =============================================================================
 Platform::Platform()
 {
     _speed = 0;
@@ -15,148 +23,23 @@ Platform::Platform()
 
     rightMotor = Motor::Motor(PWM_PIN_1, DIR1_PIN_1, DIR2_PIN_1, HALL_PIN_1, 1);
     leftMotor = Motor::Motor(PWM_PIN_2, DIR1_PIN_2, DIR2_PIN_2, HALL_PIN_2, 0);
+
     //radioInput = Radio::Radio();
+
     compass = Adafruit_HMC5883_Unified(12345);
 
     motorTimer = Timer();
     PIDTimer = Timer();
     //radioTimer = Timer();
 
-    sensorStepper = AccelStepper(AccelStepper::FULL4WIRE, STEPPER_PIN_1, STEPPER_PIN_2, STEPPER_PIN_3, STEPPER_PIN_4, true);
-    //sensorStepper.setEnablePin(STEPPER_ENABLE);
-    pinMode(STEPPER_ENABLE, OUTPUT);
-    pinMode(STEPPER_ENABLE_2, OUTPUT);
-    analogWrite(STEPPER_ENABLE, HIGH);
-    analogWrite(STEPPER_ENABLE_2, HIGH);
-    sensorStepper.setSpeed(STEPPER_SPEED);
-    sensorStepper.setAcceleration(STEPPER_ACCEL);
+    lidarStepper = AccelStepper(AccelStepper::DRIVER, STEPPER_STEP_PIN, STEPPER_DIR_PIN);
+
+    lidarServo.attach(LIDAR_SERVO_PIN);
 }
 
-void Platform::begin()
-{
-    DebugSerial->begin(DEBUG_SERIAL_BAUDRATE);
-
-    MainSerial->begin(MAIN_SERIAL_BAUDRATE);
-
-    DebugSerial->println("Initializing Walle...");
-    delay(100);
-
-    motorTimer.setTimer(MOTOR_DELAY);
-    delay(200);
-    PIDTimer.setTimer(PID_DELAY);
-    delay(200);
-    radioTimer.setTimer(RADIO_DELAY);
-    delay(200);
-
-    sensorStepper.enableOutputs(); //Enable the sensorStepper
-
-    /* Initialise the sensor */
-    if (!compass.begin())
-    {
-        /* There was a problem detecting the HMC5883 ... check your connections */
-        DebugSerial->println("Error, no HMC5883 detected.");
-        while (1)
-            ;
-    }
-    if (rotationPID.err())
-    {
-        DebugSerial->println("There was a configuration error with the rotationPID");
-        while (1)
-            ;
-    }
-
-    //CPPM.begin();
-
-    DebugSerial->println("Walle is runnning.");
-}
-
-/*
- * run()
- * 
- * This function is the main function of the platform and it should be run in loop()
- * Every loop it checks if a timer has passed and if it has it runs its corresponding functions
- * We can also add things without timers that should run all the time. (16Mhz)
- * 
- * Here we also have the state machine controlling the different modes of the platform
- * 
- * Inputs: none
- * Outputs: none
- */
-void Platform::run()
-{
-    switch (_mode)
-    {
-    case IDLE:
-        //MainSerial->write("State = Idle");
-        readSerial();
-
-        // int dir = random(360);
-        // String str = String(dir);
-        // char ch[3];
-        // str.toCharArray(ch, 3);
-        // MainSerial->write(ch);
-
-        delay(1000);
-        break;
-    case MANUAL:
-        if (motorTimer.check())
-        {
-            mapToMotors();
-            runMotors();
-        }
-        break;
-    case AUTOMATIC:
-        //DebugSerial->println("Automatic");
-        if (motorTimer.check())
-        {
-            //mapToMotors();
-            //runMotors();
-
-            int dir = random(360);
-            //char str[10];
-            //itoa(dir, str, 10);
-
-            String str = String(dir);
-            char ch[3];
-            str.toCharArray(ch, 3);
-            MainSerial->write(ch);
-            DebugSerial->write(ch);
-
-        }
-        if (PIDTimer.check())
-        {
-            //run PID loop
-            //DebugSerial->println("PID");
-        }
-
-        break;
-    case MISSION:
-
-        break;
-    case RADIO:
-        /*
-        if (radioTimer.check())
-        {
-            readFromRadio();
-        }
-        if (motorTimer.check())
-        {
-            mapToMotors();
-            runMotors();
-        }*/
-
-        break;
-    case STEPPER:
-        sensorStepper.move(1000);
-        sensorStepper.run();
-        break;
-    default:
-        DebugSerial->println("Error, this state does not exist. Going back to idle.");
-        _mode = IDLE;
-        break;
-    }
-}
-
+// =============================================================================
+// Getters and Setters
+// =============================================================================
 void Platform::setSpeed(double speed)
 {
     _speed = speed;
@@ -183,6 +66,139 @@ int Platform::getMode()
 {
     return _mode;
 }
+
+
+// =============================================================================
+// Initialisation
+// =============================================================================
+void Platform::begin()
+{
+    DebugSerial->begin(DEBUG_SERIAL_BAUDRATE);
+
+    MainSerial->begin(MAIN_SERIAL_BAUDRATE);
+
+    DebugSerial->println("Initializing Walle...");
+    delay(100);
+
+    motorTimer.setTimer(MOTOR_DELAY);
+    delay(200);
+    PIDTimer.setTimer(PID_DELAY);
+    delay(200);
+    radioTimer.setTimer(RADIO_DELAY);
+    delay(200);
+
+
+    lidarStepper.setEnablePin(STEPPER_ENABLE_PIN);
+    lidarStepper.setSpeed(STEPPER_SPEED);
+    lidarStepper.setAcceleration(STEPPER_ACCEL);
+    lidarStepper.enableOutputs(); //Enable the lidarStepper
+
+    lidarServo.write(LIDAR_SERVO_START);
+
+    /* Initialise the sensor */
+    if (!compass.begin())
+    {
+        /* There was a problem detecting the HMC5883 ... check your connections */
+        DebugSerial->println("Error, no HMC5883 detected.");
+        while (1)
+            ;
+    }
+    if (rotationPID.err())
+    {
+        DebugSerial->println("There was a configuration error with the rotationPID");
+        while (1)
+            ;
+    }
+
+    //CPPM.begin();
+
+    DebugSerial->println("Walle is runnning.");
+}
+
+
+// =============================================================================
+// Member Functions
+// =============================================================================
+
+/*
+ * run()
+ * 
+ * This function is the main function of the platform and it should be run in loop()
+ * Every loop it checks if a timer has passed and if it has it runs its corresponding functions
+ * We can also add things without timers that should run all the time. (16Mhz)
+ * 
+ * Here we also have the state machine controlling the different modes of the platform
+ * 
+ * Inputs: none
+ * Outputs: none
+ */
+
+void Platform::run()
+{
+    switch (_mode)
+    {
+    case IDLE:
+        //MainSerial->write("State = Idle");
+        readSerial();
+
+        delay(1000);
+        break;
+    case MANUAL:
+        if (motorTimer.check())
+        {
+            mapToMotors();
+            runMotors();
+        }
+        break;
+    case AUTOMATIC:
+        //DebugSerial->println("Automatic");
+        if (motorTimer.check())
+        {
+            //mapToMotors();
+            //runMotors();
+
+            int dir = random(360);
+        
+            String str = String(dir);
+            char ch[3];
+            str.toCharArray(ch, 3);
+            MainSerial->write(ch);
+            DebugSerial->write(ch);
+        }
+        if (PIDTimer.check())
+        {
+            //run PID loop
+            //DebugSerial->println("PID");
+        }
+
+        break;
+    case MISSION:
+
+        break;
+    case RADIO:
+        /*
+        if (radioTimer.check())
+        {
+            readFromRadio();
+        }
+        if (motorTimer.check())
+        {
+            mapToMotors();
+            runMotors();
+        }*/
+
+        break;
+    case STEPPER:
+        lidarStepper.move(1000);
+        lidarStepper.run();
+        break;
+    default:
+        DebugSerial->println("Error, this state does not exist. Going back to idle.");
+        _mode = IDLE;
+        break;
+    }
+}
+
 
 //Run the motors with their set speed
 void Platform::runMotors()
@@ -318,7 +334,7 @@ void Platform::rotateTo(int setPoint)
 {
     float output = rotationPID.calculate(setPoint, getHeading());
 
-    CUTOFF1(output);
+    CUTOFF1(output); 
     _x = output;
     DebugSerial->println(output);
 }
@@ -354,4 +370,14 @@ void Platform::readSerial()
 void Platform::readCommand(String input)
 {
     DebugSerial->println(input);
+}
+
+void Platform::sendData(int data, char dataType)
+{
+    String dataString = "|" + String(dataType) + ":" + String(data);
+    int stringSize = sizeof(dataString);
+    char convertedData[stringSize];
+    dataString.toCharArray(convertedData, stringSize);
+
+    MainSerial->write(convertedData);
 }

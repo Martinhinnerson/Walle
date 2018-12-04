@@ -1,3 +1,9 @@
+//========================================================================================
+/*                                                                                      *
+ *                                       PLATFORM                                       *
+ *                                                                                      */
+//========================================================================================
+
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
@@ -39,7 +45,10 @@ class Platform
     Motor leftMotor;
 
     //Stepper motor
-    AccelStepper sensorStepper;
+    AccelStepper lidarStepper;
+
+    //Servo 
+    Servo lidarServo;
 
     //The radio input handler
     Radio radioInput;
@@ -81,6 +90,8 @@ class Platform
 
     void readSerial();
     void readCommand(String input);
+
+    void sendData(int data, char dataType);
 };
 
 #endif
