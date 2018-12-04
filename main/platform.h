@@ -12,8 +12,8 @@
 #include "timer.h"
 #include <jm_CPPM.h>
 #include <TFMini.h>
-#include  <PacketSerial.h>
-
+#include <PacketSerial.h>
+#include <AccelStepper.h>
 
 //Cutoff everything outside of -1 < a < 1
 #define CUTOFF1(a) max(-1, min(a, 1))
@@ -38,17 +38,24 @@ class Platform
     Motor rightMotor;
     Motor leftMotor;
 
+    //Stepper motor
+    AccelStepper sensorStepper;
+
     //The radio input handler
     Radio radioInput;
 
+    //Magnetometer sensor
     Adafruit_HMC5883_Unified compass; // = Adafruit_HMC5883_Unified(12345);
 
+    //Timers
     Timer motorTimer; // timer for the motor updates
     Timer PIDTimer; // timer for PID loop
     Timer radioTimer; // timer for the radio
 
+
+    // Serial port definitions
     HardwareSerial *DebugSerial = &Serial;
-    PacketSerial MainSerial;
+    HardwareSerial *MainSerial = &Serial1;
 
   public:
     Platform(); //constructor
@@ -70,9 +77,10 @@ class Platform
 
     void rotateTo(int setPoint);
 
-    void processPacketFromSender(const uint8_t* buffer, size_t size);
-
     void displaySensorDetails();
+
+    void readSerial();
+    void readCommand(String input);
 };
 
 #endif

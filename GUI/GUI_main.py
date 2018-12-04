@@ -7,6 +7,8 @@ import kivy.properties as properties
 import importlib
 import threading
 import sys
+import Queue
+
 # Specific imports
 from kivy.app import App
 from kivy.uix.widget import Widget
@@ -22,6 +24,8 @@ from kivy.uix.checkbox import CheckBox
 
 #This is for PySerial
 import serial
+
+
 
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.uix.video import Video
@@ -46,6 +50,24 @@ class GUIWidget(GridLayout):
     draw_checkbox = properties.ObjectProperty(None)
     draw_label = properties.ObjectProperty(None)
     console = properties.ObjectProperty(None)
+
+     # Define queue where threads put functions for the main thread to run
+    callback_queue = Queue.Queue()
+
+    # Call this function in a thred to pass a function call to the main thread queue
+    def call_in_main(func):
+        callback_queue.put(func)
+
+    # Run this function in main to check if a function has been called
+    def wait_for_callback():
+        while True:
+            try:
+                # Does not block if queue is empty
+                callback = callback_queue.get(False)
+            except Queue.Empty:
+                break
+            callback()
+
 
     def __init__(self, **kwargs):
         super(GUIWidget, self).__init__(**kwargs)

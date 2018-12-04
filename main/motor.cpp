@@ -60,9 +60,9 @@ void Motor::runMotor()
     digitalWrite(DIR_PIN2, HIGH);
   }
   int pulseWidth = 0;
-  if (abs(_speed) > 0.05)
+  if (abs(_speed) > MOTOR_DEADBAND)
   {
-    pulseWidth = map(abs(_speed) * 100, 0, 100, 50, 255);
+    pulseWidth = map(abs(_speed) * 100, 0, 100, PWM_MIN, PWM_MAX);
   }
   analogWrite(PWM_PIN, pulseWidth);
 }

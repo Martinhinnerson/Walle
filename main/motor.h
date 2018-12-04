@@ -30,7 +30,7 @@ public:
   void setSpeed(double speed);                                          //set the speed of the motor, (-1 < speed < 1)
   int getSpeed();                                                       //returns the current speed of the motor
   void runMotor();                                                      //Run the motor with dir and speed
-  int readRpm();                                                        //read the rpm of the motor using hall sensor, NOT CURRENTLY ON THE ROBOT
+  int readRpm();//! NOT IMPLEMENTED                                                        //read the rpm of the motor using hall sensor, NOT CURRENTLY ON THE ROBOT
 };
 
 #endif

@@ -15,21 +15,28 @@ Platform::Platform()
 
     rightMotor = Motor::Motor(PWM_PIN_1, DIR1_PIN_1, DIR2_PIN_1, HALL_PIN_1, 1);
     leftMotor = Motor::Motor(PWM_PIN_2, DIR1_PIN_2, DIR2_PIN_2, HALL_PIN_2, 0);
-    radioInput = Radio::Radio();
+    //radioInput = Radio::Radio();
     compass = Adafruit_HMC5883_Unified(12345);
 
     motorTimer = Timer();
     PIDTimer = Timer();
-    radioTimer = Timer();
+    //radioTimer = Timer();
+
+    sensorStepper = AccelStepper(AccelStepper::FULL4WIRE, STEPPER_PIN_1, STEPPER_PIN_2, STEPPER_PIN_3, STEPPER_PIN_4, true);
+    //sensorStepper.setEnablePin(STEPPER_ENABLE);
+    pinMode(STEPPER_ENABLE, OUTPUT);
+    pinMode(STEPPER_ENABLE_2, OUTPUT);
+    analogWrite(STEPPER_ENABLE, HIGH);
+    analogWrite(STEPPER_ENABLE_2, HIGH);
+    sensorStepper.setSpeed(STEPPER_SPEED);
+    sensorStepper.setAcceleration(STEPPER_ACCEL);
 }
 
 void Platform::begin()
 {
     DebugSerial->begin(DEBUG_SERIAL_BAUDRATE);
-    
-    Serial1.begin(MAIN_SERIAL_BAUDRATE);
-    //MainSerial.setStream(&Serial1);
-    //MainSerial.setPacketHandler(&processPacketFromSender);
+
+    MainSerial->begin(MAIN_SERIAL_BAUDRATE);
 
     DebugSerial->println("Initializing Walle...");
     delay(100);
@@ -41,21 +48,26 @@ void Platform::begin()
     radioTimer.setTimer(RADIO_DELAY);
     delay(200);
 
+    sensorStepper.enableOutputs(); //Enable the sensorStepper
+
     /* Initialise the sensor */
     if (!compass.begin())
     {
         /* There was a problem detecting the HMC5883 ... check your connections */
-            DebugSerial->println("Ooops, no HMC5883 detected ... Check your wiring!");
-        while (1);
+        DebugSerial->println("Error, no HMC5883 detected.");
+        while (1)
+            ;
     }
     if (rotationPID.err())
     {
-            DebugSerial->println("There was a configuration error with the rotationPID");
-        while (1);
+        DebugSerial->println("There was a configuration error with the rotationPID");
+        while (1)
+            ;
     }
-    
-    CPPM.begin();
-    
+
+    //CPPM.begin();
+
+    DebugSerial->println("Walle is runnning.");
 }
 
 /*
@@ -70,56 +82,79 @@ void Platform::begin()
  * Inputs: none
  * Outputs: none
  */
-void Platform::run(){
+void Platform::run()
+{
+    switch (_mode)
+    {
+    case IDLE:
+        //MainSerial->write("State = Idle");
+        readSerial();
 
-//Allways read serial input
-MainSerial.update();
+        // int dir = random(360);
+        // String str = String(dir);
+        // char ch[3];
+        // str.toCharArray(ch, 3);
+        // MainSerial->write(ch);
 
-    switch(_mode){
-        case IDLE:
-            DebugSerial->println("State = Idle");
-            delay(1000);
+        delay(1000);
+        break;
+    case MANUAL:
+        if (motorTimer.check())
+        {
+            mapToMotors();
+            runMotors();
+        }
+        break;
+    case AUTOMATIC:
+        //DebugSerial->println("Automatic");
+        if (motorTimer.check())
+        {
+            //mapToMotors();
+            //runMotors();
+
+            int dir = random(360);
+            //char str[10];
+            //itoa(dir, str, 10);
+
+            String str = String(dir);
+            char ch[3];
+            str.toCharArray(ch, 3);
+            MainSerial->write(ch);
+            DebugSerial->write(ch);
+
+        }
+        if (PIDTimer.check())
+        {
+            //run PID loop
+            //DebugSerial->println("PID");
+        }
 
         break;
-        case MANUAL:
-            if(motorTimer.check()){
-                mapToMotors();
-                runMotors();
-            }
-        break;
-        case AUTOMATIC:
-
-            if(motorTimer.check()){
-                mapToMotors();
-                runMotors();
-                //DebugSerial->println("Motor");
-            }
-            if(PIDTimer.check()){
-                //run PID loop
-                //DebugSerial->println("PID");
-            }
+    case MISSION:
 
         break;
-        case MISSION:
+    case RADIO:
+        /*
+        if (radioTimer.check())
+        {
+            readFromRadio();
+        }
+        if (motorTimer.check())
+        {
+            mapToMotors();
+            runMotors();
+        }*/
 
         break;
-        case RADIO:
-            
-            if(radioTimer.check()){
-                readFromRadio();
-            }
-            if(motorTimer.check()){
-                mapToMotors();
-                runMotors();
-            }
-
+    case STEPPER:
+        sensorStepper.move(1000);
+        sensorStepper.run();
         break;
-        default:
-                DebugSerial->println("Error, this state does not exist. Going back to idle.");
-            _mode = IDLE;
+    default:
+        DebugSerial->println("Error, this state does not exist. Going back to idle.");
+        _mode = IDLE;
         break;
     }
-
 }
 
 void Platform::setSpeed(double speed)
@@ -139,11 +174,13 @@ int Platform::getDirection()
     return _direction;
 }
 
-void Platform::setMode(int mode){
+void Platform::setMode(int mode)
+{
     _mode = mode;
 }
 
-int Platform::getMode(){
+int Platform::getMode()
+{
     return _mode;
 }
 
@@ -188,7 +225,21 @@ void Platform::mapToMotors()
     leftMotor.setSpeed(left);
     rightMotor.setSpeed(right);
 
-#ifdef DEBUG_MOTORS         DebugSerial->print("Mapped: ");         DebugSerial->print(_y);     DebugSerial->print(", ");        DebugSerial->println(_x);       DebugSerial->print("Radius and angle: ");         DebugSerial->print(r);        DebugSerial->print(", ");      DebugSerial->println(t);        DebugSerial->print("Left: ");          DebugSerial->print(left);          DebugSerial->print(", ");       DebugSerial->print("Right: ");       DebugSerial->println(right);
+#ifdef DEBUG_MOTORS
+    DebugSerial->print("Mapped: ");
+    DebugSerial->print(_y);
+    DebugSerial->print(", ");
+
+    DebugSerial->println(_x);
+    DebugSerial->print("Radius and angle: ");
+    DebugSerial->print(r);
+    DebugSerial->print(", ");
+    DebugSerial->println(t);
+    DebugSerial->print("Left: ");
+    DebugSerial->print(left);
+    DebugSerial->print(", ");
+    DebugSerial->print("Right: ");
+    DebugSerial->println(right);
 #endif
 }
 
@@ -221,7 +272,19 @@ int Platform::getHeading()
     int headingDegrees = heading * 180 / M_PI;
 
 #ifdef DEBUG_COMPASS
-    /* Display the results (magnetic vector values are in micro-Tesla (uT)) */          DebugSerial->print("X: ");          DebugSerial->print(event.magnetic.x);       DebugSerial->print("  ");         DebugSerial->print("Y: ");      DebugSerial->print(event.magnetic.y);        DebugSerial->print("  ");       DebugSerial->print("Z: ");         DebugSerial->print(event.magnetic.z);        DebugSerial->print("  ");    DebugSerial->println("uT");          DebugSerial->print("Heading (degrees): ");      DebugSerial->println(headingDegrees);
+    /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
+    DebugSerial->print("X: ");
+    DebugSerial->print(event.magnetic.x);
+    DebugSerial->print("  ");
+    DebugSerial->print("Y: ");
+    DebugSerial->print(event.magnetic.y);
+    DebugSerial->print("  ");
+    DebugSerial->print("Z: ");
+    DebugSerial->print(event.magnetic.z);
+    DebugSerial->print("  ");
+    DebugSerial->println("uT");
+    DebugSerial->print("Heading (degrees): ");
+    DebugSerial->println(headingDegrees);
 #endif
 
     _heading = headingDegrees;
@@ -231,8 +294,24 @@ int Platform::getHeading()
 void Platform::displaySensorDetails()
 {
     sensor_t sensor;
-    compass.getSensor(&sensor);         DebugSerial->println("------------------------------------");           DebugSerial->print("Sensor:       ");       DebugSerial->println(sensor.name);       DebugSerial->print("Driver Ver:   ");         DebugSerial->println(sensor.version);         DebugSerial->print("Unique ID:    ");          DebugSerial->println(sensor.sensor_id);         DebugSerial->print("Max Value:    ");       DebugSerial->print(sensor.max_value);     DebugSerial->println(" uT");       DebugSerial->print("Min Value:    ");         DebugSerial->print(sensor.min_value);         DebugSerial->println(" uT");           DebugSerial->print("Resolution:   ");       DebugSerial->print(sensor.resolution);          DebugSerial->println(" uT");           DebugSerial->println("------------------------------------");       DebugSerial->println("");
-    delay(500);
+    compass.getSensor(&sensor);
+    DebugSerial->println("------------------------------------");
+    DebugSerial->print("Sensor:       ");
+    DebugSerial->println(sensor.name);
+    DebugSerial->print("Driver Ver:   ");
+    DebugSerial->println(sensor.version);
+    DebugSerial->print("Unique ID:    ");
+    DebugSerial->println(sensor.sensor_id);
+    DebugSerial->print("Max Value:    ");
+    DebugSerial->print(sensor.max_value);
+    DebugSerial->println(" uT");
+    DebugSerial->print("Min Value:    ");
+    DebugSerial->print(sensor.min_value);
+    DebugSerial->println(" uT");
+    DebugSerial->print("Resolution:   ");
+    DebugSerial->print(sensor.resolution);
+    DebugSerial->println(" uT");
+    DebugSerial->println("------------------------------------");
 }
 
 void Platform::rotateTo(int setPoint)
@@ -241,10 +320,38 @@ void Platform::rotateTo(int setPoint)
 
     CUTOFF1(output);
     _x = output;
-            DebugSerial->println(output);
+    DebugSerial->println(output);
 }
 
-void Platform::processPacketFromSender(const uint8_t* buffer, size_t size)
+void Platform::readSerial()
 {
+    //DebugSerial->println("Reading:");
+    //char input[MAX_INPUT_SIZE+1];
+    //String inputCommand = MainSerial->readStringUntil(SERIAL_SPLIT_CHAR);
 
+    String inputValue = " ";
+    if (MainSerial->available())
+    {
+        inputValue = MainSerial->readStringUntil('$');
+    }
+    DebugSerial->println(inputValue);
+
+    // int inputType = inputCommand.toInt();
+    // switch(inputType)
+    // {
+    //     case COMMAND:
+    //         readCommand(inputValue);
+    //     break;
+    //     case SENSORVAL:
+
+    //     break;
+    //     default:
+
+    //     break;
+    // }
+}
+
+void Platform::readCommand(String input)
+{
+    DebugSerial->println(input);
 }

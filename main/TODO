@@ -4,8 +4,10 @@ TODOs:
   ☐ Emigrate the code to the Arduino Mega @started(18-11-21 10:06)
     ☐ The cppm library might have to be customized to support the mega @started(18-11-21 10:06)
       I beleive the library works now but it has to be tested
-  ☐ Implement the stepper motor for the lidar system
+  ☐ Implement the stepper motor for the lidar system @started(18-11-25 11:10)
     It will be controlled with an H-bridge and probably the accelStepper library
+    ☐ Implement the AccelStepper library @started(18-11-25 11:14)
+      This is a nice library for handling stepper motors with accurate acceleration, speed and step.
   ☐ Make it so that the radio reciever is diabled if the controller is not turned on
     Right now if the controller is not on when the platform is on weird things can happen
     The platform should be able to sense when there is not radio signals being recieved
@@ -15,14 +17,18 @@ TODOs:
     The one we have is a Adafruit Mini Audio FX board 16Mb
   ☐ Add an LCD screen for information, status, mode etc.
     The one we have is a BT21605AV which uses I2C communication
+  ☐ Add software interupt support using Timer in the timer class
+    Right now the class only has "manual" timers not using interrupts.
+    The MEGA has a few Timers that can to interrupts and these can be used for the most important timings
+    eg. maybe the PID loops.
+  ☐ It would be nice to have a text file (JSON maybe?) that defines the communication protocol
+    This all the units (UI, platform etc. ) can load this file to know what the different commands should interpret to
+    instead of having to sync the commands manually. Eg. if we change one command on one of the unit it also has to be changed
+    in all other files instead of only having to change it in one place.
     
   Communication:
     ☐ Create a communication protocol/class for sending sensor data
       It would be nice to have one unit controlling gathering and sending of the sendor data
-      ☐ Implement the PacketSerial library @started(18-11-21 19:14)
-        https://github.com/bakercp/PacketSerial
-      ☐ Implement COBS
-        https://pythonhosted.org/cobs/cobs.cobs.html#cobs-examples
     ☐ Add a bluetooth module with passthrough for the serial out
       This should not be the same serial as the one used to debug
     ☐ Add the WIFI module and implement TCP protocol (not priority)
@@ -49,6 +55,10 @@ TODOs:
     This is a stupid task and it should be done when the code is written...
 
 Archive:
+  ✘ Implement the PacketSerial library @started(18-11-21 19:14) @cancelled(18-11-29 11:20) @wasted(1w16h6m57s) @project(TODOs.Communication)
+    https://github.com/bakercp/PacketSerial
+  ✘ Implement COBS @cancelled(18-11-29 11:21) @project(TODOs.Communication)
+    https://pythonhosted.org/cobs/cobs.cobs.html#cobs-examples
   ✔ Fix so that the timers work for the arduino Mega @started(18-11-21 18:25) @done(18-11-21 18:25) @lasted(57s) @project(TODOs.Sensors)
     Right now the arduino crashes at startup either when initializing the timers or the first time they are set.
     This could have to do with timers on the MEGA2560 being different than the UNO

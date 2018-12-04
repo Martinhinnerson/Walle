@@ -2,8 +2,9 @@
 #define SENSOR_H
 
 #include "settings.h"
-
 class Sensor{
+
+
 
 
 
