@@ -69,7 +69,7 @@
 #define STEPPER_ENABLE_PIN  34
 
 //Servo
-#define LIDAR_SERVO_PIN     35
+#define LIDAR_SERVO_PIN     12 //PWM
 
 #endif
 
@@ -114,8 +114,8 @@
 // =============================================================================
 // Stepper settings
 // =============================================================================
-#define STEPPER_SPEED       2000
-#define STEPPER_ACCEL       500
+#define STEPPER_SPEED       5000
+#define STEPPER_ACCEL       1000
 
 #define STEPS_PER_REV       200*16
 
@@ -129,7 +129,17 @@
 // =============================================================================
 // Servo Settings
 // =============================================================================
-#define LIDAR_SERVO_START   90 // (0-180)
+#define LIDAR_SERVO_LEVEL   95
+#define LIDAR_SERVO_START   95 // (0-180)
+#define LIDAR_SERVO_MAX     140
+#define LIDAR_SERVO_MIN     10
+
+
+// =============================================================================
+// RADIO SETTINGS
+// =============================================================================
+//#define USE_RADIO 1
+
 
 
 #endif

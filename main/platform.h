@@ -9,17 +9,18 @@
 
 #include <Arduino.h>
 #include "motor.h"
-#include "radio.h"
+//#include "radio.h"
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
 #include "PID.h"
 #include "settings.h"
 #include "timer.h"
-#include <jm_CPPM.h>
+//#include <jm_CPPM.h>
 #include <TFMini.h>
 #include <PacketSerial.h>
 #include <AccelStepper.h>
+#include <PWMServo.h>
 
 //Cutoff everything outside of -1 < a < 1
 #define CUTOFF1(a) max(-1, min(a, 1))
@@ -37,6 +38,9 @@ class Platform
     //The mode the platform is currently in
     int _mode;
 
+    //The angle of the lidar sensor, this will be mapped to the servo angle
+    int _lidarAngle;
+
   public:
     PID rotationPID;
 
@@ -48,10 +52,10 @@ class Platform
     AccelStepper lidarStepper;
 
     //Servo 
-    Servo lidarServo;
+    PWMServo lidarServo;
 
     //The radio input handler
-    Radio radioInput;
+    //Radio radioInput;
 
     //Magnetometer sensor
     Adafruit_HMC5883_Unified compass; // = Adafruit_HMC5883_Unified(12345);

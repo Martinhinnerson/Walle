@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include "platform.h"
 
+
 // =============================================================================
 // Constructor
 // =============================================================================
@@ -34,7 +35,7 @@ Platform::Platform()
 
     lidarStepper = AccelStepper(AccelStepper::DRIVER, STEPPER_STEP_PIN, STEPPER_DIR_PIN);
 
-    lidarServo.attach(LIDAR_SERVO_PIN);
+    
 }
 
 // =============================================================================
@@ -67,7 +68,6 @@ int Platform::getMode()
     return _mode;
 }
 
-
 // =============================================================================
 // Initialisation
 // =============================================================================
@@ -87,12 +87,12 @@ void Platform::begin()
     radioTimer.setTimer(RADIO_DELAY);
     delay(200);
 
-
     lidarStepper.setEnablePin(STEPPER_ENABLE_PIN);
     lidarStepper.setSpeed(STEPPER_SPEED);
     lidarStepper.setAcceleration(STEPPER_ACCEL);
     lidarStepper.enableOutputs(); //Enable the lidarStepper
 
+    lidarServo.attach(LIDAR_SERVO_PIN);
     lidarServo.write(LIDAR_SERVO_START);
 
     /* Initialise the sensor */
@@ -100,21 +100,18 @@ void Platform::begin()
     {
         /* There was a problem detecting the HMC5883 ... check your connections */
         DebugSerial->println("Error, no HMC5883 detected.");
-        while (1)
-            ;
+        while (1);
     }
     if (rotationPID.err())
     {
         DebugSerial->println("There was a configuration error with the rotationPID");
-        while (1)
-            ;
+        while (1);
     }
 
     //CPPM.begin();
 
     DebugSerial->println("Walle is runnning.");
 }
-
 
 // =============================================================================
 // Member Functions
@@ -158,7 +155,7 @@ void Platform::run()
             //runMotors();
 
             int dir = random(360);
-        
+
             String str = String(dir);
             char ch[3];
             str.toCharArray(ch, 3);
@@ -189,8 +186,12 @@ void Platform::run()
 
         break;
     case STEPPER:
-        lidarStepper.move(1000);
-        lidarStepper.run();
+        //lidarStepper.moveTo(lidarStepper.currentPosition() + 10000);
+        //lidarStepper.run();
+        //DebugSerial->println("STEPPER");
+
+        lidarServo.write(LIDAR_SERVO_START);
+
         break;
     default:
         DebugSerial->println("Error, this state does not exist. Going back to idle.");
@@ -198,7 +199,6 @@ void Platform::run()
         break;
     }
 }
-
 
 //Run the motors with their set speed
 void Platform::runMotors()
@@ -208,13 +208,13 @@ void Platform::runMotors()
 }
 
 //Read the values from the radio reciever and store them to _x, _y
-void Platform::readFromRadio()
-{
-    radioInput.updateRadio();
-    //Map to -1, 1
-    _x = double(map(radioInput.getJoysticX(), -514, 514, -100, 100)) / 100;
-    _y = double(map(radioInput.getJoysticY(), -514, 514, -100, 100)) / 100;
-}
+// void Platform::readFromRadio()
+// {
+//     radioInput.updateRadio();
+//     //Map to -1, 1
+//     _x = double(map(radioInput.getJoysticX(), -514, 514, -100, 100)) / 100;
+//     _y = double(map(radioInput.getJoysticY(), -514, 514, -100, 100)) / 100;
+// }
 
 //Map x and y to the motors
 void Platform::mapToMotors()
@@ -334,7 +334,7 @@ void Platform::rotateTo(int setPoint)
 {
     float output = rotationPID.calculate(setPoint, getHeading());
 
-    CUTOFF1(output); 
+    CUTOFF1(output);
     _x = output;
     DebugSerial->println(output);
 }

@@ -11,8 +11,6 @@ TODOs:
   ☐ Make it so that the radio reciever is diabled if the controller is not turned on
     Right now if the controller is not on when the platform is on weird things can happen
     The platform should be able to sense when there is not radio signals being recieved
-  ☐ Change the pinmap for the arduino mega in settings.h
-    Currently it is just the same as the UNO
   ☐ Implement the sound card to bea able to play sounds
     The one we have is a Adafruit Mini Audio FX board 16Mb
   ☐ Add an LCD screen for information, status, mode etc.
@@ -25,12 +23,13 @@ TODOs:
     This all the units (UI, platform etc. ) can load this file to know what the different commands should interpret to
     instead of having to sync the commands manually. Eg. if we change one command on one of the unit it also has to be changed
     in all other files instead of only having to change it in one place.
-    
+  ☐ Add functions for the lidar sensor control
+    ☐ Add functions for control of the rotation with the stepper motor
+    ☐ Add functions for angle control of the the sensor with the servo
+
   Communication:
     ☐ Create a communication protocol/class for sending sensor data
       It would be nice to have one unit controlling gathering and sending of the sendor data
-    ☐ Add a bluetooth module with passthrough for the serial out
-      This should not be the same serial as the one used to debug
     ☐ Add the WIFI module and implement TCP protocol (not priority)
       the wifi module will talk to the computer and both recieve and send data
 
@@ -55,6 +54,10 @@ TODOs:
     This is a stupid task and it should be done when the code is written...
 
 Archive:
+  ✔ Change the pinmap for the arduino mega in settings.h @done(18-12-08 16:06) @project(TODOs)
+    Currently it is just the same as the UNO
+  ✔ Add a bluetooth module with passthrough for the serial out @done(18-12-08 16:07) @project(TODOs.Communication)
+    This should not be the same serial as the one used to debug
   ✘ Implement the PacketSerial library @started(18-11-21 19:14) @cancelled(18-11-29 11:20) @wasted(1w16h6m57s) @project(TODOs.Communication)
     https://github.com/bakercp/PacketSerial
   ✘ Implement COBS @cancelled(18-11-29 11:21) @project(TODOs.Communication)
